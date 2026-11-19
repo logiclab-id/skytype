@@ -1,5 +1,3 @@
-import { MarkerSwoosh } from "@/components/doodles";
-
 const BUTTON_GUIDE = [
   {
     name: "B  I  S  <>",
@@ -51,7 +49,6 @@ export function DocsView() {
       <div>
         <h2
           style={{
-            position: "relative",
             display: "inline-block",
             fontFamily: "var(--font-hand)",
             fontSize: "2rem",
@@ -61,7 +58,6 @@ export function DocsView() {
           }}
         >
           How Typely Works
-          <MarkerSwoosh color="var(--marker-accent)" />
         </h2>
         <p style={{ color: "var(--ink-muted)", marginTop: "0.35rem", fontSize: "0.84rem" }}>
           Zero history E2E encrypted bundler for code snippets, API responses, and notes in one place.

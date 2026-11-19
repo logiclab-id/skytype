@@ -78,6 +78,7 @@ export function ShareDialog({
             <span
               style={{
                 position: "relative",
+                isolation: "isolate",
                 display: "inline-block",
                 fontFamily: "var(--font-hand)",
                 fontSize: "1.85rem",
