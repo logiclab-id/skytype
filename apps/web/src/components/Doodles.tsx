@@ -65,6 +65,52 @@ export function SketchLoopArrow() {
   );
 }
 
+export function CornerHandwrittenNotes() {
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "fixed",
+        inset: 0,
+        pointerEvents: "none",
+        overflow: "hidden",
+        zIndex: 0,
+      }}
+    >
+      {/* Bottom-right handwritten note + sketchy key & sparkle */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "1.35rem",
+          right: "1.75rem",
+          transform: "rotate(3deg)",
+          color: "var(--ink-muted)",
+          opacity: 0.62,
+          textAlign: "right",
+        }}
+      >
+        <svg width="74" height="34" viewBox="0 0 82 38" fill="none" style={{ marginLeft: "auto", display: "block", marginBottom: "2px" }}>
+          <path
+            d="M14 6 L16 12 L22 14 L16 16 L14 22 L12 16 L6 14 L12 12 Z"
+            stroke="var(--accent)"
+            strokeWidth="1.5"
+            strokeLinejoin="round"
+          />
+          <circle cx="36" cy="21" r="7.5" stroke="currentColor" strokeWidth="1.6" />
+          <circle cx="36" cy="21" r="2.2" stroke="var(--accent)" strokeWidth="1.4" />
+          <path d="M44 21 H74 M64 21 V28 M71 21 V26" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+        </svg>
+        <div style={{ fontFamily: "var(--font-hand)", fontSize: "1.22rem", lineHeight: 1.1 }}>
+          zero history · client only
+        </div>
+        <svg width="128" height="10" viewBox="0 0 128 10" fill="none" style={{ marginLeft: "auto", display: "block" }}>
+          <path d="M4 7 Q 64 2, 124 6" stroke="var(--marker-warm)" strokeWidth="3.5" strokeLinecap="round" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
 export function SubtleHandwrittenAccents() {
   return (
     <div

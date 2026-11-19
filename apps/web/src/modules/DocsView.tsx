@@ -3,35 +3,35 @@ import { MarkerSwoosh } from "@/components/Doodles";
 const BUTTON_GUIDE = [
   {
     name: "B  I  S  <>",
-    desc: "Format teks menjadi Bold, Italic, Strikethrough, atau Inline Code.",
+    desc: "Format text as Bold, Italic, Strikethrough, or Inline / Block Code.",
   },
   {
     name: "H1  H2  H3",
-    desc: "Ubah baris aktif menjadi heading Markdown (judul besar hingga sub-judul).",
+    desc: "Turn the current line into a Markdown heading (from large title to subheading).",
   },
   {
     name: "Bullet & 1. List",
-    desc: "Ubah baris terpilih menjadi list rapi. Otomatis lanjut saat menekan Enter.",
+    desc: "Convert selected lines into a clean list. Automatically continues when pressing Enter.",
   },
   {
     name: "Quote · Link · —",
-    desc: "Sisipkan kutipan (>), tautan [text](url), atau garis pemisah (---).",
+    desc: "Insert a blockquote (>), hyperlink [text](url), or horizontal divider (---).",
   },
   {
     name: "↶  ↷  (Undo / Redo)",
-    desc: "Kembalikan atau ulangi perubahan teks hingga 50 langkah terakhir.",
+    desc: "Undo or redo your text changes up to the last 50 steps.",
   },
   {
     name: "Format ▾",
-    desc: "Pilih bahasa (JSON, YAML, PHP, TS, Python, dll.) untuk menyisipkan blok ```lang.",
+    desc: "Pick a language (JSON, YAML, PHP, TS, Python, etc.) to insert a ```lang code block.",
   },
   {
     name: "Beautify",
-    desc: "Rapikan JSON, YAML, dan list secara otomatis (seluruh dokumen atau teks yang diblok).",
+    desc: "Automatically tidy up JSON, YAML, HTML, code blocks, and lists across the editor.",
   },
   {
     name: "Clear & Share",
-    desc: "Clear mengosongkan editor. Share mengenkripsi catatan + Title/Desc di browser menjadi Magic Link.",
+    desc: "Clear resets the editor. Share encrypts your note + Title/Desc in your browser into a Magic Link.",
   },
 ] as const;
 
@@ -64,7 +64,7 @@ export function DocsView() {
           <MarkerSwoosh color="var(--marker-accent)" />
         </h2>
         <p style={{ color: "var(--ink-muted)", marginTop: "0.35rem", fontSize: "0.84rem" }}>
-          Zero-history E2E encrypted bundler untuk paste kode, API response, dan catatan dalam satu tempat.
+          Zero history E2E encrypted bundler for code snippets, API responses, and notes in one place.
         </p>
       </div>
 
@@ -116,14 +116,12 @@ export function DocsView() {
           <text x="364" y="286" fill="#ffffff" fontSize="11" fontWeight="600" fontFamily="sans-serif">Share</text>
 
           {/* Handwritten Callouts */}
-          {/* 1. Toolbar callout (top-left) */}
           <text x="12" y="26" fill="#d9b27c" fontSize="18" fontFamily="Caveat, cursive" transform="rotate(-4 12 26)">
             1. Markdown &amp; list tools
           </text>
           <path d="M 118 28 Q 160 22, 185 45" stroke="#d9b27c" strokeWidth="1.6" strokeDasharray="4 3" strokeLinecap="round" />
           <path d="M 178 44 L 186 46 L 184 38" stroke="#d9b27c" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
 
-          {/* 2. Auto-format paste callout (right) */}
           <text x="642" y="128" fill="#9ec58a" fontSize="18" fontFamily="Caveat, cursive" transform="rotate(3 642 128)">
             paste JSON/list
           </text>
@@ -133,7 +131,6 @@ export function DocsView() {
           <path d="M 636 135 Q 608 135, 588 145" stroke="#9ec58a" strokeWidth="1.6" strokeDasharray="4 3" strokeLinecap="round" />
           <path d="M 594 139 L 587 146 L 596 148" stroke="#9ec58a" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
 
-          {/* 3. Format dropdown callout (bottom-left) */}
           <text x="10" y="232" fill="#82aaff" fontSize="18" fontFamily="Caveat, cursive" transform="rotate(-4 10 232)">
             2. Pick language
           </text>
@@ -142,42 +139,40 @@ export function DocsView() {
           </text>
           <path d="M 112 238 Q 130 242, 144 236" stroke="#82aaff" strokeWidth="1.6" strokeDasharray="4 3" strokeLinecap="round" />
 
-          {/* 4. Beautify callout (bottom-right) */}
           <text x="638" y="246" fill="#b49be8" fontSize="18" fontFamily="Caveat, cursive" transform="rotate(3 638 246)">
             tidy up code!
           </text>
           <path d="M 632 242 Q 580 264, 526 248" stroke="#b49be8" strokeWidth="1.6" strokeDasharray="4 3" strokeLinecap="round" />
 
-          {/* 5. Share callout (bottom-center) */}
-          <text x="205" y="294" fill="#38bdf8" fontSize="19" fontFamily="Caveat, cursive" transform="rotate(-3 205 294)">
+          <text x="148" y="287" fill="#38bdf8" fontSize="18" fontFamily="Caveat, cursive" transform="rotate(-2 148 287)">
             3. E2E encrypt + magic link!
           </text>
-          <path d="M 310 288 Q 324 282, 333 283" stroke="#38bdf8" strokeWidth="1.6" strokeLinecap="round" />
+          <path d="M 308 282 Q 320 280, 331 282" stroke="#38bdf8" strokeWidth="1.6" strokeLinecap="round" />
         </svg>
       </div>
 
-      {/* Cara Pakai */}
+      {/* How to Use */}
       <div>
         <h3 style={{ fontFamily: "var(--font-hand)", fontSize: "1.45rem", color: "var(--ink)", marginBottom: "0.4rem" }}>
-          Cara Pakai
+          How to Use
         </h3>
         <ol style={{ paddingLeft: "1.2rem", color: "var(--ink-muted)", display: "flex", flexDirection: "column", gap: "0.35rem" }}>
           <li>
-            <strong style={{ color: "var(--ink)" }}>Tulis atau Paste:</strong> Ketik catatan atau paste API response, kode, maupun list dari tools lain (otomatis dirapikan).
+            <strong style={{ color: "var(--ink)" }}>Write or Paste:</strong> Type notes or paste API responses, code snippets, or lists from other tools (lists auto-format on paste).
           </li>
           <li>
-            <strong style={{ color: "var(--ink)" }}>Format &amp; Cek Preview:</strong> Sisipkan blok bahasa lewat <code style={{ color: "var(--accent)" }}>Format ▾</code>, rapikan dengan <strong style={{ color: "var(--ink)" }}>Beautify</strong>, lalu cek hasilnya di tab <strong style={{ color: "var(--ink)" }}>Preview</strong>.
+            <strong style={{ color: "var(--ink)" }}>Format &amp; Preview:</strong> Insert a language block via <code style={{ color: "var(--accent)" }}>Format ▾</code>, clean everything up with <strong style={{ color: "var(--ink)" }}>Beautify</strong>, and check the result in <strong style={{ color: "var(--ink)" }}>Preview</strong>.
           </li>
           <li>
-            <strong style={{ color: "var(--ink)" }}>Share Magic Link:</strong> Klik <strong style={{ color: "var(--ink)" }}>Share</strong>, isi <strong style={{ color: "var(--ink)" }}>Title</strong> &amp; <strong style={{ color: "var(--ink)" }}>Description</strong>, lalu bagikan link. Key dekripsi hanya ada di <code style={{ color: "var(--accent)" }}>#fragment</code> URL.
+            <strong style={{ color: "var(--ink)" }}>Share Magic Link:</strong> Click <strong style={{ color: "var(--ink)" }}>Share</strong>, fill in <strong style={{ color: "var(--ink)" }}>Title</strong> &amp; <strong style={{ color: "var(--ink)" }}>Description</strong>, and share the link. The decryption key lives only in the URL <code style={{ color: "var(--accent)" }}>#fragment</code>.
           </li>
         </ol>
       </div>
 
-      {/* Kegunaan Per Button */}
+      {/* Button Reference */}
       <div>
         <h3 style={{ fontFamily: "var(--font-hand)", fontSize: "1.45rem", color: "var(--ink)", marginBottom: "0.55rem" }}>
-          Kegunaan Tombol
+          Button Guide
         </h3>
         <div
           style={{

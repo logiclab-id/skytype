@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  CornerHandwrittenNotes,
   HandwrittenToast,
   IconBulletList,
   IconLink,
@@ -90,6 +91,22 @@ export function App() {
   };
 
   useEffect(() => {
+    let timer: number | undefined;
+    const onGlobalScroll = () => {
+      document.documentElement.classList.add("is-scrolling");
+      if (timer) window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        document.documentElement.classList.remove("is-scrolling");
+      }, 900);
+    };
+    window.addEventListener("scroll", onGlobalScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onGlobalScroll);
+      if (timer) window.clearTimeout(timer);
+    };
+  }, []);
+
+  useEffect(() => {
     if (!langMenuOpen) return;
     const handleOutside = (e: MouseEvent) => {
       if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
@@ -146,7 +163,7 @@ export function App() {
       .finally(() => setSharedLoading(false));
   }, []);
 
-  const lineCount = useMemo(() => Math.max(content.split("\n").length, 13), [content]);
+  const lineCount = useMemo(() => Math.max(content.split("\n").length, 22), [content]);
   const previewSections = useMemo(() => parseMixedSections(content), [content]);
   const sharedSections = useMemo(
     () => (sharedData ? parseMixedSections(sharedData.content) : []),
@@ -605,12 +622,16 @@ export function App() {
     <div
       style={{
         minHeight: "100vh",
+        height: activeTab === "write" ? "100vh" : undefined,
+        overflow: activeTab === "write" ? "hidden" : undefined,
         position: "relative",
         display: "flex",
         flexDirection: "column",
-        padding: "1rem 1.5rem 2rem",
+        padding: activeTab === "write" ? "1rem 1.5rem 1.15rem" : "1rem 1.5rem 2rem",
       }}
     >
+      <CornerHandwrittenNotes />
+
       <header
         style={{
           position: "relative",
@@ -741,7 +762,8 @@ export function App() {
         )}
 
         <section className="clean-card" style={{ display: "flex", flexDirection: "column" }}>
-          {activeTab === "write" && (
+          <div key={activeTab} className="tab-panel-animate" style={{ display: "flex", flexDirection: "column" }}>
+            {activeTab === "write" && (
             <>
               <div
                 style={{
@@ -805,7 +827,7 @@ export function App() {
                 </div>
               )}
 
-              <div style={{ display: "flex", height: "clamp(300px, 48vh, 430px)", overflow: "hidden" }}>
+              <div style={{ display: "flex", height: "clamp(300px, calc(100vh - 295px), 620px)", overflow: "hidden" }}>
                 <div
                   ref={gutterRef}
                   aria-hidden="true"
@@ -1018,6 +1040,7 @@ export function App() {
           )}
 
           {activeTab === "docs" && <DocsView />}
+          </div>
         </section>
 
         {activeTab !== "docs" && (
