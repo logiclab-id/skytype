@@ -1,0 +1,18 @@
+{
+  "name": "typely",
+  "private": true,
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev": "concurrently -n api,web -c cyan,green \"dotnet run --project apps/api/api.csproj\" \"bun run --cwd apps/web dev\"",
+    "dev:api": "dotnet run --project apps/api/api.csproj",
+    "dev:web": "bun run --cwd apps/web dev",
+    "build": "dotnet build apps/api/api.csproj && bun run --cwd apps/web build",
+    "build:api": "dotnet build apps/api/api.csproj",
+    "build:web": "bun run --cwd apps/web build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
