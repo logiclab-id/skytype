@@ -1,4 +1,4 @@
-import { MarkerSwoosh } from "@/components/Doodles";
+import { MarkerSwoosh } from "@/components/doodles";
 
 const BUTTON_GUIDE = [
   {

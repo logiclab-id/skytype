@@ -28,6 +28,7 @@ public static class AppSetup
 
     public static void ConfigureMiddleware(this WebApplication app)
     {
+        app.InitializeDatabase();
         app.UseCors(CorsPolicyName);
     }
 }

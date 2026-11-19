@@ -265,3 +265,61 @@ export function highlightCodeLine(line: string, type: string): React.ReactNode {
     return <Fragment key={idx}>{part}</Fragment>;
   });
 }
+
+export function renderHighlightedEditorLines(content: string): React.ReactNode {
+  const lines = content.split("\n");
+  let currentLang: string | null = null;
+
+  return lines.map((line, idx) => {
+    const fenceMatch = line.match(/^(\s*```)([a-zA-Z0-9_+-]*)(.*)$/);
+    if (fenceMatch) {
+      const [, ticks, lang, rest] = fenceMatch;
+      if (currentLang === null) {
+        currentLang = (lang || "code").toLowerCase();
+      } else {
+        currentLang = null;
+      }
+      return (
+        <div key={idx}>
+          <span className="tok-fence">{ticks}</span>
+          {lang && <span className="tok-lang">{lang}</span>}
+          {rest}
+          {line === "" ? "\u200B" : ""}
+        </div>
+      );
+    }
+
+    if (currentLang !== null) {
+      return (
+        <div key={idx} className="tok-code-base">
+          {line ? highlightCodeLine(line, currentLang) : "\u200B"}
+        </div>
+      );
+    }
+
+    if (/^#{1,3}\s/.test(line)) {
+      return (
+        <div key={idx} className="tok-heading">
+          {line}
+        </div>
+      );
+    }
+
+    if (line.includes("`")) {
+      const parts = line.split(/(`[^`]+`)/g);
+      return (
+        <div key={idx} className="tok-prose">
+          {parts.map((part, pIdx) =>
+            part.startsWith("`") && part.endsWith("`") && part.length >= 2 ? (
+              <span key={pIdx} className="tok-lang">{part}</span>
+            ) : (
+              <span key={pIdx}>{part}</span>
+            )
+          )}
+        </div>
+      );
+    }
+
+    return <div key={idx} className="tok-prose">{line || "\u200B"}</div>;
+  });
+}

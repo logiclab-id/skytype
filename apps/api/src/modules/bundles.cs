@@ -1,22 +1,17 @@
-using System.Collections.Concurrent;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
+using Typely.Api.Src.Db;
 
 namespace Typely.Api.Src.Modules;
 
-public record CreateBundleRequest(string Ciphertext, string Iv);
-
-public record BundleRecord(string Id, string Ciphertext, string Iv, DateTimeOffset CreatedAt);
-
 public static class BundlesModule
 {
-    private static readonly ConcurrentDictionary<string, BundleRecord> Store = new();
-
     public static void MapBundleRoutes(this RouteGroupBuilder api)
     {
         var group = api.MapGroup("/bundles");
 
-        group.MapPost("/", (CreateBundleRequest req) =>
+        group.MapPost("/", async (CreateBundleRequest req, AppDbContext db, CancellationToken ct) =>
         {
             if (string.IsNullOrWhiteSpace(req.Ciphertext) || string.IsNullOrWhiteSpace(req.Iv))
             {
@@ -29,26 +24,37 @@ public static class BundlesModule
             }
 
             var id = WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(9));
-            var record = new BundleRecord(id, req.Ciphertext, req.Iv, DateTimeOffset.UtcNow);
-            Store[id] = record;
+            var bundle = new Bundle
+            {
+                Id = id,
+                Ciphertext = req.Ciphertext,
+                Iv = req.Iv,
+                CreatedAt = DateTimeOffset.UtcNow,
+            };
 
-            return Results.Created($"/api/bundles/{id}", new { id });
+            db.Bundles.Add(bundle);
+            await db.SaveChangesAsync(ct);
+
+            return Results.Created($"/api/bundles/{id}", new CreateBundleResponse(id));
         });
 
-        group.MapGet("/{id}", (string id) =>
+        group.MapGet("/{id}", async (string id, AppDbContext db, CancellationToken ct) =>
         {
-            if (!Store.TryGetValue(id, out var record))
+            var bundle = await db.Bundles
+                .AsNoTracking()
+                .FirstOrDefaultAsync(b => b.Id == id, ct);
+
+            if (bundle is null || (bundle.ExpiresAt.HasValue && bundle.ExpiresAt <= DateTimeOffset.UtcNow))
             {
                 return Results.NotFound(new { error = "Bundle not found." });
             }
 
-            return Results.Ok(new
-            {
-                id = record.Id,
-                ciphertext = record.Ciphertext,
-                iv = record.Iv,
-                createdAt = record.CreatedAt
-            });
+            return Results.Ok(new BundleResponse(
+                bundle.Id,
+                bundle.Ciphertext,
+                bundle.Iv,
+                bundle.CreatedAt
+            ));
         });
     }
 }

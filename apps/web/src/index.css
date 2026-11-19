@@ -157,9 +157,43 @@ html.is-scrolling {
   animation: tabFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+.tab-underline {
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  bottom: -5px;
+  height: 7px;
+  color: var(--accent);
+}
+
 .tab-underline path {
   stroke-dasharray: 130;
   animation: drawUnderline 0.24s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.tb-icon {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  padding: 0.24rem 0.45rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.12s ease, background 0.12s ease;
+}
+
+.tb-icon:hover:not(:disabled) {
+  color: var(--ink);
+  background: var(--surface-hover);
+}
+
+.tb-icon:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 textarea::-webkit-scrollbar,
