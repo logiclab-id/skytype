@@ -1,3 +1,5 @@
+using Typely.Api.Src.Modules;
+
 namespace Typely.Api.Src;
 
 public static class Routes
@@ -12,5 +14,7 @@ public static class Routes
             service = "typely-api",
             timestamp = DateTimeOffset.UtcNow
         }));
+
+        api.MapBundleRoutes();
     }
 }

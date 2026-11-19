@@ -77,30 +77,127 @@ export function SubtleHandwrittenAccents() {
         zIndex: 0,
       }}
     >
-      {/* Subtle handwritten note on wide screens (top-right) */}
+      {/* Top-left: coffee cup + "paste anything ->" */}
       <div
         style={{
           position: "absolute",
-          top: "15%",
-          right: "3%",
-          transform: "rotate(5deg)",
+          top: "13%",
+          left: "2.5%",
+          transform: "rotate(-6deg)",
           color: "var(--ink-muted)",
-          opacity: 0.45,
-          fontFamily: "var(--font-hand)",
-          fontSize: "1.2rem",
+          opacity: 0.65,
+        }}
+      >
+        <svg width="42" height="40" viewBox="0 0 48 46" fill="none" style={{ marginBottom: "2px" }}>
+          <path d="M12 10 Q10 5, 14 2" stroke="var(--accent)" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M21 9 Q19 4, 23 1" stroke="var(--accent)" strokeWidth="1.7" strokeLinecap="round" />
+          <path d="M8 16 H32 V34 C32 39, 8 39, 8 34 Z" stroke="currentColor" strokeWidth="1.7" strokeLinejoin="round" />
+          <path d="M32 19 C39 19, 39 30, 32 30" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+        </svg>
+        <div style={{ fontFamily: "var(--font-hand)", fontSize: "1.35rem", lineHeight: 1.05 }}>
+          paste anything →
+        </div>
+        <svg width="78" height="10" viewBox="0 0 78 10" fill="none">
+          <path d="M2 6 Q 38 2, 74 7" stroke="var(--marker-accent)" strokeWidth="4" strokeLinecap="round" />
+        </svg>
+      </div>
+
+      {/* Bottom-left: paper plane + "{ code + notes }" */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "8%",
+          left: "2.8%",
+          transform: "rotate(-5deg)",
+          color: "var(--ink-muted)",
+          opacity: 0.62,
+        }}
+      >
+        <svg width="110" height="52" viewBox="0 0 115 58" fill="none">
+          <path
+            d="M4 44 C 24 42, 34 26, 48 28 C 60 30, 52 42, 44 38 C 36 34, 54 18, 76 16"
+            stroke="var(--accent)"
+            strokeWidth="1.7"
+            strokeDasharray="4 4"
+            strokeLinecap="round"
+          />
+          <path
+            d="M78 14 L106 6 L90 28 L86 19 Z"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinejoin="round"
+          />
+        </svg>
+        <div style={{ fontFamily: "var(--font-hand)", fontSize: "1.3rem", marginTop: "-6px" }}>
+          {"{ code + notes }"}
+        </div>
+      </div>
+
+      {/* Top-right: crown, sparkles & "no history!" */}
+      <div
+        style={{
+          position: "absolute",
+          top: "14%",
+          right: "2.8%",
+          transform: "rotate(6deg)",
+          color: "var(--ink-muted)",
+          opacity: 0.65,
           textAlign: "center",
         }}
       >
-        zero history · E2E
-        <svg width="86" height="10" viewBox="0 0 86 10" fill="none" style={{ display: "block", margin: "0 auto" }}>
-          <path d="M3 6 Q 43 2, 83 6" stroke="var(--marker-accent)" strokeWidth="3.5" strokeLinecap="round" />
+        <svg width="92" height="56" viewBox="0 0 96 60" fill="none">
+          <path
+            d="M28 42 L24 22 L38 31 L48 15 L58 31 L72 22 L68 42 Z"
+            stroke="currentColor"
+            strokeWidth="1.7"
+            strokeLinejoin="round"
+          />
+          <path d="M14 18 L16 24 L22 26 L16 28 L14 34 L12 28 L6 26 L12 24 Z" stroke="var(--accent)" strokeWidth="1.5" strokeLinejoin="round" />
+          <circle cx="82" cy="18" r="2.3" fill="var(--accent)" />
         </svg>
+        <div style={{ fontFamily: "var(--font-hand)", fontSize: "1.35rem", marginTop: "-10px" }}>
+          no history!
+        </div>
       </div>
     </div>
   );
 }
 
 /* Crisp 1.8px stroke icons */
+export function HandwrittenToast({ message }: { message: string }) {
+  return (
+    <div
+      role="status"
+      aria-live="polite"
+      style={{
+        position: "fixed",
+        bottom: "1.35rem",
+        left: "50%",
+        transform: "translateX(-50%) rotate(-1deg)",
+        zIndex: 60,
+        padding: "0.35rem 1.05rem",
+        borderRadius: "255px 14px 225px 14px / 14px 225px 14px 255px",
+        background: "var(--surface)",
+        border: "1.5px solid var(--border-strong)",
+        color: "var(--ink)",
+        fontFamily: "var(--font-hand)",
+        fontSize: "1.22rem",
+        fontWeight: 700,
+        boxShadow: "3px 3px 0px rgba(0, 0, 0, 0.7)",
+        display: "inline-flex",
+        alignItems: "center",
+        gap: "0.45rem",
+        pointerEvents: "none",
+      }}
+    >
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M5 13l4 4L19 7" />
+      </svg>
+      <span>{message}</span>
+    </div>
+  );
+}
+
 export function IconLock({ size = 14 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

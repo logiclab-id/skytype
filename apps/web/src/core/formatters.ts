@@ -24,7 +24,10 @@ export function formatFieldContent(
 
   if (hasSelection) {
     const selected = fullText.slice(selectionStart, selectionEnd);
-    const formatted = formatSnippet(selected, format);
+    const formatted =
+      format === "auto"
+        ? { ok: true, output: autoFormatMixed(selected) }
+        : formatSnippet(selected, format);
     if (!formatted.ok) return formatted;
     return {
       ok: true,
@@ -40,6 +43,98 @@ export function formatFieldContent(
   }
 
   return formatSnippet(fullText, format);
+}
+
+/**
+ * Auto-formats pasted content if it is inside a ```json / ```yaml block
+ * or contains valid JSON / fenced blocks.
+ */
+export function autoFormatOnPaste(
+  fullText: string,
+  selectionStart: number,
+  selectionEnd: number,
+  pastedText: string
+): string {
+  const before = fullText.slice(0, selectionStart);
+  const after = fullText.slice(selectionEnd);
+
+  // Check if cursor is inside an open fenced block
+  const fenceMatches = [...before.matchAll(/```([a-zA-Z0-9_+-]*)/g)];
+  if (fenceMatches.length % 2 === 1) {
+    const lastFenceLang = (fenceMatches[fenceMatches.length - 1][1] ?? "").toLowerCase();
+    if (lastFenceLang === "json") {
+      const formatted = formatSnippet(pastedText, "json");
+      if (formatted.ok) {
+        return before + formatted.output + after;
+      }
+    } else if (lastFenceLang === "yaml" || lastFenceLang === "yml") {
+      const formatted = formatSnippet(pastedText, "yaml");
+      if (formatted.ok) {
+        return before + formatted.output + after;
+      }
+    }
+  }
+
+  const combined = before + pastedText + after;
+  return autoFormatMixed(combined);
+}
+
+/**
+ * Normalizes bullet and numbered lists copied from other tools (Notion, Word, Slack, etc.)
+ * outside of fenced code blocks.
+ */
+function normalizeListsOutsideFences(input: string): string {
+  const lines = input.split("\n");
+  const out: string[] = [];
+  let inFence = false;
+  const numCounters = new Map<number, number>();
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\r$/, "");
+    if (/^\s*```/.test(line)) {
+      inFence = !inFence;
+      numCounters.clear();
+      out.push(line);
+      continue;
+    }
+
+    if (inFence) {
+      out.push(line);
+      continue;
+    }
+
+    // Match Unicode bullets (•, ◦, ▪, ▫, ‣, ⁃, ∙) or markdown bullets (-, *, +)
+    const bulletMatch = line.match(/^([ \t]*)(?:[•◦▪▫‣⁃∙]|[-*+])\s+(.*)$/);
+    if (bulletMatch) {
+      const indent = bulletMatch[1].replace(/\t/g, "  ");
+      const level = Math.floor(indent.length / 2);
+      const cleanIndent = "  ".repeat(level);
+      numCounters.delete(level);
+      out.push(`${cleanIndent}- ${bulletMatch[2].trimStart()}`);
+      continue;
+    }
+
+    // Match numbered lists like "1. foo", "1) foo", "  2.   bar"
+    const numMatch = line.match(/^([ \t]*)\d+[.)]\s+(.*)$/);
+    if (numMatch) {
+      const indent = numMatch[1].replace(/\t/g, "  ");
+      const level = Math.floor(indent.length / 2);
+      const cleanIndent = "  ".repeat(level);
+      const nextNum = (numCounters.get(level) ?? 0) + 1;
+      numCounters.set(level, nextNum);
+      out.push(`${cleanIndent}${nextNum}. ${numMatch[2].trimStart()}`);
+      continue;
+    }
+
+    if (line.trim() === "") {
+      numCounters.clear();
+    } else {
+      numCounters.clear();
+    }
+    out.push(line);
+  }
+
+  return out.join("\n");
 }
 
 function formatSnippet(input: string, format: BlockFormat): FormatResult {
@@ -85,14 +180,40 @@ function formatSnippet(input: string, format: BlockFormat): FormatResult {
  * inside a mixed text+JSON+YAML document without disturbing surrounding notes.
  */
 function autoFormatMixed(input: string): string {
-  // 1. Format fenced code blocks first: ```json ... ``` or ```yaml ... ```
+  // 1. Format fenced code blocks for all supported languages (and untagged ``` blocks)
   const withFormattedFences = input.replace(
-    /```(json|yaml|yml)\r?\n([\s\S]*?)```/gi,
+    /```([a-zA-Z0-9_+-]*)\r?\n([\s\S]*?)```/gi,
     (match, lang: string, body: string) => {
-      const fmt: BlockFormat = lang.toLowerCase() === "json" ? "json" : "yaml";
-      const res = formatSnippet(body.trim(), fmt);
-      if (!res.ok) return match;
-      return `\`\`\`${lang.toLowerCase()}\n${res.output}\n\`\`\``;
+      const l = (lang || "").toLowerCase();
+      if (l === "json") {
+        const res = formatSnippet(body.trim(), "json");
+        return res.ok ? `\`\`\`${lang}\n${res.output}\n\`\`\`` : match;
+      }
+      if (l === "yaml" || l === "yml") {
+        const res = formatSnippet(body.trim(), "yaml");
+        return res.ok ? `\`\`\`${lang}\n${res.output}\n\`\`\`` : match;
+      }
+      if (["html", "xml", "svg", "jsx", "tsx"].includes(l)) {
+        return `\`\`\`${lang}\n${formatMarkup(body)}\n\`\`\``;
+      }
+      if (["css", "scss", "js", "javascript", "ts", "typescript", "php", "cs", "csharp", "go", "java", "rust", "rs", "c", "cpp"].includes(l)) {
+        return `\`\`\`${lang}\n${formatBraceCode(body)}\n\`\`\``;
+      }
+      if (["py", "python", "rb", "ruby", "sh", "bash", "sql"].includes(l)) {
+        const cleaned = body.trim().split("\n").map((ln) => ln.replace(/\t/g, "  ").replace(/\s+$/, "")).join("\n");
+        return `\`\`\`${lang}\n${cleaned}\n\`\`\``;
+      }
+
+      // Untagged ``` block: auto-detect JSON or HTML/JSX
+      const trimmedBody = body.trim();
+      if (trimmedBody.startsWith("{") || trimmedBody.startsWith("[")) {
+        const res = formatSnippet(trimmedBody, "json");
+        if (res.ok) return `\`\`\`${lang}\n${res.output}\n\`\`\``;
+      }
+      if (trimmedBody.startsWith("<")) {
+        return `\`\`\`${lang}\n${formatMarkup(body)}\n\`\`\``;
+      }
+      return match;
     }
   );
 
@@ -153,7 +274,7 @@ function autoFormatMixed(input: string): string {
     i++;
   }
 
-  return out.join("\n");
+  return normalizeListsOutsideFences(out.join("\n"));
 }
 
 /**
@@ -248,4 +369,73 @@ function isEmptyCollection(v: unknown): boolean {
   if (Array.isArray(v)) return v.length === 0;
   if (typeof v === "object" && v !== null) return Object.keys(v).length === 0;
   return false;
+}
+
+const VOID_HTML_TAGS = new Set([
+  "area", "base", "br", "col", "embed", "hr", "img", "input",
+  "link", "meta", "param", "source", "track", "wbr",
+]);
+
+function formatMarkup(raw: string): string {
+  const lines = raw.trim().split("\n");
+  const out: string[] = [];
+  let indent = 0;
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\t/g, "  ").trim();
+    if (!line) {
+      out.push("");
+      continue;
+    }
+
+    const startsWithClosing = /^<\//.test(line) || /^\/\s*>/.test(line);
+    if (startsWithClosing) {
+      indent = Math.max(0, indent - 1);
+    }
+
+    out.push("  ".repeat(indent) + line);
+
+    // Adjust indent for next line
+    const openMatch = line.match(/^<([a-zA-Z][a-zA-Z0-9.-]*)\b[^>]*>$/);
+    const isSelfClosing = /\/>$/.test(line);
+    const hasInlineClose = /^<([a-zA-Z][a-zA-Z0-9.-]*)\b[^>]*>.*<\/\1>$/.test(line);
+    const isMultiLineOpenStart = /^<([a-zA-Z][a-zA-Z0-9.-]*)(?:\s+.*)?$/.test(line) && !line.includes(">");
+
+    if (isMultiLineOpenStart) {
+      indent++;
+    } else if (openMatch && !isSelfClosing && !hasInlineClose && !VOID_HTML_TAGS.has(openMatch[1].toLowerCase())) {
+      indent++;
+    } else if (!startsWithClosing && /<\/[a-zA-Z][a-zA-Z0-9.-]*>$/.test(line) && !/^<[a-zA-Z]/.test(line)) {
+      indent = Math.max(0, indent - 1);
+    }
+  }
+
+  return out.join("\n");
+}
+
+function formatBraceCode(raw: string): string {
+  const lines = raw.trim().split("\n");
+  const out: string[] = [];
+  let indent = 0;
+
+  for (const rawLine of lines) {
+    const line = rawLine.replace(/\t/g, "  ").trim();
+    if (!line) {
+      out.push("");
+      continue;
+    }
+
+    if (/^[}\])]/.test(line)) {
+      indent = Math.max(0, indent - 1);
+    }
+
+    out.push("  ".repeat(indent) + line);
+
+    const opens = (line.match(/[{([]/g) ?? []).length;
+    const closes = (line.match(/[})\]]/g) ?? []).length;
+    const startsWithClose = /^[}\])]/.test(line) ? 1 : 0;
+    indent = Math.max(0, indent + opens - (closes - startsWithClose));
+  }
+
+  return out.join("\n");
 }

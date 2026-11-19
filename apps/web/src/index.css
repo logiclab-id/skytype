@@ -1,33 +1,6 @@
-:root,
-[data-theme="light"] {
-  --bg-canvas: #f5f5f5;
-  --surface: #ffffff;
-  --surface-sub: #fafafa;
-  --surface-hover: #f0f0f0;
-  --border: #e5e5e5;
-  --border-strong: #d4d4d4;
-  --ink: #171717;
-  --ink-muted: #737373;
-  --accent: #0284c7;
-  --accent-soft: rgba(2, 132, 199, 0.1);
-  --accent-border: rgba(2, 132, 199, 0.28);
-  --marker-accent: rgba(56, 189, 248, 0.3);
-  --marker-warm: rgba(250, 204, 21, 0.35);
-  --danger: #dc2626;
-  --danger-bg: #fef2f2;
+@import "tailwindcss";
 
-  /* Syntax tokens (Light) */
-  --tok-key: #0369a1;
-  --tok-str: #047857;
-  --tok-num: #b45309;
-  --tok-bool: #7c3aed;
-
-  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
-  --font-hand: "Caveat", cursive;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
-}
-
-[data-theme="dark"] {
+:root {
   --bg-canvas: #111111;
   --surface: #181818;
   --surface-sub: #141414;
@@ -44,17 +17,36 @@
   --danger: #fca5a5;
   --danger-bg: rgba(239, 68, 68, 0.12);
 
-  /* Syntax tokens (Matte Black) */
-  --tok-key: #7dd3fc;
-  --tok-str: #6ee7b7;
-  --tok-num: #fcd34d;
-  --tok-bool: #c4b5fd;
+  /* shadcn/ui tokens mapped to matte black */
+  --background: #111111;
+  --foreground: #ededed;
+  --card: #181818;
+  --card-foreground: #ededed;
+  --popover: #181818;
+  --popover-foreground: #ededed;
+  --primary: #0284c7;
+  --primary-foreground: #ffffff;
+  --secondary: #222222;
+  --secondary-foreground: #ededed;
+  --muted: #1c1c1c;
+  --muted-foreground: #8a8a8a;
+  --input: #2e2e2e;
+  --ring: #38bdf8;
+  --radius: 0.5rem;
+
+  /* Syntax tokens (Matte Black - soft pastel, low-glare) */
+  --tok-key: #82aaff;
+  --tok-str: #9ec58a;
+  --tok-num: #d9b27c;
+  --tok-bool: #b49be8;
+
+  --font-sans: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  --font-hand: "Caveat", cursive;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 body {
@@ -63,7 +55,6 @@ body {
   color: var(--ink);
   font-family: var(--font-sans);
   overflow-x: hidden;
-  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
 .clean-card {
@@ -96,42 +87,65 @@ body {
 
 .clean-share-btn {
   font-family: var(--font-sans);
-  font-size: 0.92rem;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 500;
+  height: 36px;
   color: #ffffff;
-  background: #0284c7;
-  border: 1px solid #0284c7;
+  background: linear-gradient(180deg, #2176ff 0%, #0b5ce0 100%);
+  border: 1px solid #3d8bff;
   border-radius: 8px;
-  padding: 0.52rem 1.65rem;
+  padding: 0 18px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  transition: background-color 0.15s ease, transform 0.1s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35), 0 1px 2px rgba(0, 0, 0, 0.35);
+  transition: filter 0.15s ease, transform 0.1s ease;
 }
 
 .clean-share-btn:hover:not(:disabled) {
-  background: #0369a1;
-  transform: translateY(-1px);
+  filter: brightness(1.08);
 }
 
 .clean-share-btn:active:not(:disabled) {
-  transform: translateY(0);
+  filter: brightness(0.95);
+  transform: scale(0.985);
 }
 
 .tok-key { color: var(--tok-key); }
 .tok-str { color: var(--tok-str); }
 .tok-num { color: var(--tok-num); }
 .tok-bool { color: var(--tok-bool); }
+.tok-tag { color: #d67a84; }
+.tok-code-base { color: #c8cfd8; }
+.tok-fence { color: #5c6370; }
+.tok-lang { color: #82aaff; font-weight: 500; }
+.tok-heading { color: #d9b27c; font-weight: 600; }
+.tok-prose { color: #8b949e; }
 
 textarea::-webkit-scrollbar,
-pre::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+pre::-webkit-scrollbar,
+.scroll-auto-hide::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+textarea::-webkit-scrollbar-track,
+pre::-webkit-scrollbar-track,
+.scroll-auto-hide::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 textarea::-webkit-scrollbar-thumb,
-pre::-webkit-scrollbar-thumb {
-  background: var(--border-strong);
+pre::-webkit-scrollbar-thumb,
+.scroll-auto-hide::-webkit-scrollbar-thumb {
+  background: transparent;
   border-radius: 999px;
+  transition: background-color 0.2s ease;
+}
+
+textarea.is-scrolling::-webkit-scrollbar-thumb,
+pre.is-scrolling::-webkit-scrollbar-thumb,
+.scroll-auto-hide.is-scrolling::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
 }
