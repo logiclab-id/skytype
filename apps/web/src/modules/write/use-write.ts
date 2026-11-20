@@ -21,7 +21,7 @@ export function useWrite({ onShowToast, onClear }: UseWriteOptions) {
   const backdropRef = useRef<HTMLPreElement | null>(null);
   const gutterRef = useRef<HTMLDivElement | null>(null);
 
-  const lineCount = useMemo(() => Math.max(content.split("\n").length, 22), [content]);
+  const lineCount = useMemo(() => Math.max(content.split("\n").length, 15), [content]);
 
   const highlightedLines = useMemo(
     () => renderHighlightedEditorLines(content),

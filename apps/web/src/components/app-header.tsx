@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { MarkerSwoosh, SketchUnderline } from "@/components/doodles";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import type { Tab } from "@/types/bundle";
@@ -21,6 +22,21 @@ export function AppHeader({
   rightAction,
   linkToHome = false,
 }: AppHeaderProps) {
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const updateHeight = () => {
+      const height = Math.floor(el.getBoundingClientRect().height);
+      document.documentElement.style.setProperty("--app-header-height", `${height}px`);
+    };
+    updateHeight();
+    const observer = new ResizeObserver(updateHeight);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
   const brandStyle: React.CSSProperties = {
     position: "relative",
     fontFamily: "var(--font-hand)",
@@ -41,7 +57,7 @@ export function AppHeader({
   );
 
   return (
-    <header className="app-header">
+    <header ref={headerRef} className="app-header">
       {linkToHome ? (
         <a href="/" className="app-header-brand" style={brandStyle}>
           {brandContent}

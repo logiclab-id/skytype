@@ -49,16 +49,15 @@ export function WriteView({ write, onPreview }: WriteViewProps) {
           ))}
         </div>
 
-        <div style={{ position: "relative", flex: 1, height: "100%", overflow: "hidden" }}>
+        <div style={{ position: "relative", flex: 1, minWidth: 0 }}>
           <pre
             ref={write.backdropRef}
             aria-hidden="true"
             className="editor-content"
             style={{
-              position: "absolute",
-              inset: 0,
+              position: "relative",
+              minHeight: "360px",
               margin: 0,
-              overflow: "hidden",
               pointerEvents: "none",
               color: "var(--ink)",
             }}
@@ -77,10 +76,12 @@ export function WriteView({ write, onPreview }: WriteViewProps) {
             placeholder="Start writing markdown, code blocks, or notes here..."
             spellCheck={false}
             style={{
-              position: "relative",
+              position: "absolute",
+              inset: 0,
               zIndex: 1,
               width: "100%",
               height: "100%",
+              overflow: "hidden",
               background: "transparent",
               border: "none",
               outline: "none",
