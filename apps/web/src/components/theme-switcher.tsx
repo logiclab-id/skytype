@@ -33,7 +33,13 @@ export function ThemeSwitcher() {
             title={item.label}
             aria-label={`${item.label} theme`}
             aria-pressed={active}
-            onClick={() => setTheme(item.id)}
+            onClick={(e) => {
+              const rect = e.currentTarget.getBoundingClientRect();
+              setTheme(item.id, {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2,
+              });
+            }}
             style={{
               width: "16px",
               height: "16px",

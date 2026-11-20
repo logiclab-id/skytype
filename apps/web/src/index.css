@@ -145,6 +145,20 @@ body {
   overflow-x: hidden;
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+}
+
 .clean-card {
   background: var(--surface);
   border: 1px solid var(--border);

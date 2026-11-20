@@ -9,4 +9,4 @@ pre-commit:
       run: bun run --cwd apps/web build
     api-build:
       glob: "apps/api/**/*.cs"
-      run: dotnet build apps/api/api.csproj --no-restore
+      run: dotnet build apps/api/api.csproj --no-restore -p:OutDir=obj/lefthook-check/
