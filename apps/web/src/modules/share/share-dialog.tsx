@@ -152,7 +152,7 @@ export function ShareDialog({
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <Label htmlFor="share-max-readers">Max readers</Label>
+                <Label htmlFor="share-max-readers">Max viewer</Label>
                 <div className="flex items-center gap-1.5">
                   <Input
                     id="share-max-readers"

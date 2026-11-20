@@ -29,7 +29,7 @@ const BUTTON_GUIDE = [
   },
   {
     name: "Clear & Share",
-    desc: "Clear resets the editor. Share encrypts your note + Title/Desc in your browser into a Magic Link.",
+    desc: "Clear resets the editor. Share encrypts your note + Title/Desc in your browser into a Magic Link with a configurable Max viewer limit.",
   },
 ] as const;
 
@@ -430,6 +430,93 @@ export function DocsView() {
             <code style={{ color: "var(--accent)" }}>#fragment</code>.
           </li>
         </ol>
+      </div>
+
+      <div>
+        <h3
+          style={{
+            fontFamily: "var(--font-hand)",
+            fontSize: "1.45rem",
+            color: "var(--ink)",
+            marginBottom: "0.55rem",
+          }}
+        >
+          Expiry &amp; Max Viewer
+        </h3>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns:
+              "repeat(auto-fit, minmax(min(260px, 100%), 1fr))",
+            gap: "0.6rem",
+          }}
+        >
+          <div
+            style={{
+              padding: "0.75rem 0.9rem",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              background: "var(--surface-sub)",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.78rem",
+                fontWeight: 600,
+                color: "var(--accent)",
+              }}
+            >
+              Default Expiry (1 Year)
+            </div>
+            <div
+              style={{
+                fontSize: "0.8rem",
+                color: "var(--ink-muted)",
+                marginTop: "0.25rem",
+              }}
+            >
+              Every encrypted bundle is stored with an automatic{" "}
+              <strong style={{ color: "var(--ink)" }}>1-year</strong>{" "}
+              expiration. Once expired, the bundle is removed and opening the
+              link shows a <strong style={{ color: "var(--ink)" }}>404</strong>{" "}
+              page.
+            </div>
+          </div>
+
+          <div
+            style={{
+              padding: "0.75rem 0.9rem",
+              borderRadius: "8px",
+              border: "1px solid var(--border)",
+              background: "var(--surface-sub)",
+            }}
+          >
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: "0.78rem",
+                fontWeight: 600,
+                color: "var(--accent)",
+              }}
+            >
+              Max Viewer (Default 3x)
+            </div>
+            <div
+              style={{
+                fontSize: "0.8rem",
+                color: "var(--ink-muted)",
+                marginTop: "0.25rem",
+              }}
+            >
+              Set how many unique viewers can open the link (
+              <strong style={{ color: "var(--ink)" }}>1–100</strong>, default{" "}
+              <strong style={{ color: "var(--ink)" }}>3</strong>). Anyone who
+              has already opened it can refresh and keep reading, while any new
+              viewer past the limit is blocked.
+            </div>
+          </div>
+        </div>
       </div>
 
       <div>

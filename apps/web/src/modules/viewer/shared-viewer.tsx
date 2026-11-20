@@ -106,21 +106,6 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
         linkToHome
         rightAction={
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-            {readerInfo && (
-              <span
-                style={{
-                  fontSize: "0.75rem",
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--ink-muted)",
-                  padding: "0.25rem 0.5rem",
-                  border: "1px solid var(--border)",
-                  borderRadius: "6px",
-                }}
-                title="Unique readers who have accessed this bundle"
-              >
-                {readerInfo.used}/{readerInfo.max} readers
-              </span>
-            )}
             <a href="/" className="clean-btn" style={{ textDecoration: "none" }}>
               New Bundle
             </a>
@@ -161,7 +146,7 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
               {error.code === 404
                 ? "Bundle expired or not found"
                 : error.code === 410
-                  ? "Reader limit reached"
+                  ? "Viewer limit reached"
                   : "Unable to open bundle"}
             </h1>
 
@@ -181,6 +166,23 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
 
         {data && (
           <>
+            {readerInfo && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginBottom: "-0.55rem",
+                  padding: "0 0.2rem",
+                  fontSize: "0.78rem",
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--ink-muted)",
+                }}
+                title="Unique viewers who have accessed this bundle"
+              >
+                {readerInfo.used} / {readerInfo.max} viewer
+              </div>
+            )}
+
             {(data.title || data.description) && (
               <div className="clean-card" style={{ padding: "1.15rem 1.4rem" }}>
                 {data.title && (
