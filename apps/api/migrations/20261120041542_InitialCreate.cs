@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Typely.Api.migrations
+namespace Skytype.Api.migrations
 {
     /// <inheritdoc />
     public partial class InitialCreate : Migration

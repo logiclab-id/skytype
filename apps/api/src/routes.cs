@@ -1,6 +1,6 @@
-using Typely.Api.Src.Modules;
+using Skytype.Api.Src.Modules;
 
-namespace Typely.Api.Src;
+namespace Skytype.Api.Src;
 
 public static class Routes
 {
@@ -11,7 +11,7 @@ public static class Routes
         api.MapGet("/health", () => Results.Ok(new
         {
             status = "ok",
-            service = "typely-api",
+            service = "skytype-api",
             timestamp = DateTimeOffset.UtcNow
         }));
 

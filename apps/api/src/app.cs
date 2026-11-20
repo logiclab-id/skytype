@@ -1,8 +1,8 @@
-using Typely.Api.Src.Db;
-using Typely.Api.Src.Modules;
-using Typely.Api.Src.Utils;
+using Skytype.Api.Src.Db;
+using Skytype.Api.Src.Modules;
+using Skytype.Api.Src.Utils;
 
-namespace Typely.Api.Src;
+namespace Skytype.Api.Src;
 
 public static class AppSetup
 {

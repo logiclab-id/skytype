@@ -1,6 +1,6 @@
-using Typely.Api.Src.Modules.Bundles;
+using Skytype.Api.Src.Modules.Bundles;
 
-namespace Typely.Api.Src.Modules;
+namespace Skytype.Api.Src.Modules;
 
 public static class BundlesModule
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Typely.Api.Src.Db.Schema;
+using Skytype.Api.Src.Db.Schema;
 
-namespace Typely.Api.Src.Db.Seeders;
+namespace Skytype.Api.Src.Db.Seeders;
 
 public static class BundlesSeeder
 {

@@ -1,4 +1,4 @@
-# TYPELY
+# SKYTYPE
 
 A simple, zero-history SaaS for bundling API responses and text snippets—complete with formatters (JSON, YAML, and more)—into a single **end-to-end (E2E) encrypted** shareable link.
 
@@ -22,7 +22,7 @@ Paste your content, format it, click share, and get a link. No accounts, no hist
 ## Project Structure
 
 ```text
-TYPELY/
+SKYTYPE/
 ├── apps/
 │   ├── api/                 # ASP.NET Core Web API (opaque ciphertext storage & retrieval)
 │   │   ├── src/

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { flushSync } from "react-dom";
 import type { ThemeMode } from "@/types/bundle";
 
-const STORAGE_KEY = "typely-theme";
+const STORAGE_KEY = "skytype-theme";
 
 function getInitialTheme(): ThemeMode {
   if (typeof window === "undefined") return "dark";

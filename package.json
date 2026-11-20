@@ -1,5 +1,5 @@
 {
-  "name": "typely",
+  "name": "skytype",
   "private": true,
   "workspaces": [
     "apps/web"

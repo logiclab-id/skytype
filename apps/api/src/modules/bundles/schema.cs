@@ -1,4 +1,4 @@
-namespace Typely.Api.Src.Modules.Bundles;
+namespace Skytype.Api.Src.Modules.Bundles;
 
 public static class BundlesSchema
 {

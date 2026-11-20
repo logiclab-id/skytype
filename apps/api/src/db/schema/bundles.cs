@@ -1,4 +1,4 @@
-namespace Typely.Api.Src.Db.Schema;
+namespace Skytype.Api.Src.Db.Schema;
 
 public class Bundle
 {

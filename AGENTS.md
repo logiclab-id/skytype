@@ -1,10 +1,10 @@
 # AGENTS.md
 
-Instructions and architectural invariants for AI coding agents working on **TYPELY**.
+Instructions and architectural invariants for AI coding agents working on **SKYTYPE**.
 
 ## Product Overview
 
-TYPELY is a minimal, zero-history SaaS for bundling API responses and text snippets with formatters (JSON, YAML, etc.) into a single **end-to-end (E2E) encrypted** shareable link.
+SKYTYPE is a minimal, zero-history SaaS for bundling API responses and text snippets with formatters (JSON, YAML, etc.) into a single **end-to-end (E2E) encrypted** shareable link.
 
 User flow:
 1. User enters/pastes one or more text/API response blocks and selects/applies formatters (JSON, YAML, etc.).

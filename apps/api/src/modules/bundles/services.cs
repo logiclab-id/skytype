@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Typely.Api.Src.Db;
-using Typely.Api.Src.Db.Schema;
+using Skytype.Api.Src.Db;
+using Skytype.Api.Src.Db.Schema;
 
-namespace Typely.Api.Src.Modules.Bundles;
+namespace Skytype.Api.Src.Modules.Bundles;
 
 public sealed class BundlesService(AppDbContext db)
 {

@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Typely.Api.Src.Db;
+using Skytype.Api.Src.Db;
 
-namespace Typely.Api.Src.Utils;
+namespace Skytype.Api.Src.Utils;
 
 public sealed class ExpiredBundlesCleanupService(
     IServiceScopeFactory scopeFactory,

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
-using Typely.Api.Src.Db.Seeders;
+using Skytype.Api.Src.Db.Seeders;
 
-namespace Typely.Api.Src.Db;
+namespace Skytype.Api.Src.Db;
 
 public static class DatabaseSetup
 {

@@ -1,4 +1,4 @@
-namespace Typely.Api.Src.Db.Seeders;
+namespace Skytype.Api.Src.Db.Seeders;
 
 public static class DbSeeder
 {

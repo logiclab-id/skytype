@@ -1,4 +1,4 @@
-using Typely.Api.Src;
+using Skytype.Api.Src;
 
 var builder = WebApplication.CreateBuilder(args);
 

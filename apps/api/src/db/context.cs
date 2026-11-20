@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using Typely.Api.Src.Db.Schema;
+using Skytype.Api.Src.Db.Schema;
 
-namespace Typely.Api.Src.Db;
+namespace Skytype.Api.Src.Db;
 
 public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
 {
