@@ -89,38 +89,54 @@ export function useWrite({ onShowToast, onClear }: UseWriteOptions) {
     setFormatError(null);
   };
 
+  const restoreEditorFocus = (
+    el: HTMLTextAreaElement,
+    scrollTop: number,
+    scrollLeft: number,
+    selStart?: number,
+    selEnd?: number
+  ) => {
+    requestAnimationFrame(() => {
+      el.focus({ preventScroll: true });
+      if (selStart !== undefined && selEnd !== undefined) {
+        el.setSelectionRange(selStart, selEnd);
+      }
+      el.scrollTop = scrollTop;
+      el.scrollLeft = scrollLeft;
+      syncScroll();
+    });
+  };
+
   const wrapSelection = (before: string, after = before, placeholder = "text") => {
     const el = textareaRef.current;
     if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
+    const { selectionStart: start, selectionEnd: end, scrollTop, scrollLeft } = el;
     const selected = content.slice(start, end) || placeholder;
     const next = content.slice(0, start) + before + selected + after + content.slice(end);
     commitContent(next);
-    requestAnimationFrame(() => {
-      el.focus();
-      el.setSelectionRange(start + before.length, start + before.length + selected.length);
-    });
+    restoreEditorFocus(
+      el,
+      scrollTop,
+      scrollLeft,
+      start + before.length,
+      start + before.length + selected.length
+    );
   };
 
   const prefixLine = (prefix: string) => {
     const el = textareaRef.current;
     if (!el) return;
-    const start = el.selectionStart;
+    const { selectionStart: start, scrollTop, scrollLeft } = el;
     const lineStart = content.lastIndexOf("\n", start - 1) + 1;
     const next = content.slice(0, lineStart) + prefix + content.slice(lineStart);
     commitContent(next);
-    requestAnimationFrame(() => {
-      el.focus();
-      el.setSelectionRange(start + prefix.length, start + prefix.length);
-    });
+    restoreEditorFocus(el, scrollTop, scrollLeft, start + prefix.length, start + prefix.length);
   };
 
   const applyList = (kind: "bullet" | "number") => {
     const el = textareaRef.current;
     if (!el) return;
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
+    const { selectionStart: start, selectionEnd: end, scrollTop, scrollLeft } = el;
 
     const blockStart = content.lastIndexOf("\n", start - 1) + 1;
     const nextNewline = content.indexOf("\n", end);
@@ -141,10 +157,7 @@ export function useWrite({ onShowToast, onClear }: UseWriteOptions) {
 
     const next = content.slice(0, blockStart) + formatted + content.slice(blockEnd);
     commitContent(next);
-    requestAnimationFrame(() => {
-      el.focus();
-      el.setSelectionRange(blockStart, blockStart + formatted.length);
-    });
+    restoreEditorFocus(el, scrollTop, scrollLeft, blockStart, blockStart + formatted.length);
   };
 
   const insertFencedBlock = (lang: string) => {
@@ -158,8 +171,7 @@ export function useWrite({ onShowToast, onClear }: UseWriteOptions) {
       return;
     }
 
-    const start = el.selectionStart;
-    const end = el.selectionEnd;
+    const { selectionStart: start, selectionEnd: end, scrollTop, scrollLeft } = el;
     const selected = content.slice(start, end).trim();
     const block = selected ? `${header}\n${selected}\n\`\`\`` : template;
 
@@ -172,10 +184,11 @@ export function useWrite({ onShowToast, onClear }: UseWriteOptions) {
     commitContent(next);
 
     const cursorPos = before.length + lead.length + header.length + 1;
-    requestAnimationFrame(() => {
-      el.focus();
-      if (!selected) el.setSelectionRange(cursorPos, cursorPos);
-    });
+    if (!selected) {
+      restoreEditorFocus(el, scrollTop, scrollLeft, cursorPos, cursorPos);
+    } else {
+      restoreEditorFocus(el, scrollTop, scrollLeft);
+    }
   };
 
   const handleCodeButton = () => {

@@ -266,6 +266,57 @@ export function highlightCodeLine(line: string, type: string): React.ReactNode {
   });
 }
 
+function highlightProseInline(text: string): React.ReactNode {
+  if (!text) return "\u200B";
+  const tokens = text.split(/(\*\*[^*\n]+\*\*|\*[^*\n]+\*|~~[^~\n]+~~|`[^`\n]+`|\[[^\]\n]+\]\([^)\n]+\))/g);
+  return tokens.map((part, idx) => {
+    if (!part) return null;
+    if (part.startsWith("`") && part.endsWith("`") && part.length >= 2) {
+      return <span key={idx} className="tok-lang">{part}</span>;
+    }
+    if (part.startsWith("**") && part.endsWith("**") && part.length >= 5) {
+      return (
+        <Fragment key={idx}>
+          <span className="tok-heading">**</span>
+          <span style={{ color: "var(--ink)" }}>{part.slice(2, -2)}</span>
+          <span className="tok-heading">**</span>
+        </Fragment>
+      );
+    }
+    if (part.startsWith("*") && part.endsWith("*") && part.length >= 3) {
+      return (
+        <Fragment key={idx}>
+          <span className="tok-heading">*</span>
+          <span style={{ color: "var(--ink)" }}>{part.slice(1, -1)}</span>
+          <span className="tok-heading">*</span>
+        </Fragment>
+      );
+    }
+    if (part.startsWith("~~") && part.endsWith("~~") && part.length >= 5) {
+      return (
+        <Fragment key={idx}>
+          <span className="tok-tag">~~</span>
+          <span style={{ color: "var(--ink)" }}>{part.slice(2, -2)}</span>
+          <span className="tok-tag">~~</span>
+        </Fragment>
+      );
+    }
+    const linkMatch = part.match(/^\[([^\]\n]+)\]\(([^)\n]+)\)$/);
+    if (linkMatch) {
+      return (
+        <Fragment key={idx}>
+          <span className="tok-bool">[</span>
+          <span className="tok-lang">{linkMatch[1]}</span>
+          <span className="tok-bool">](</span>
+          <span className="tok-str">{linkMatch[2]}</span>
+          <span className="tok-bool">)</span>
+        </Fragment>
+      );
+    }
+    return <Fragment key={idx}>{part}</Fragment>;
+  });
+}
+
 export function renderHighlightedEditorLines(content: string): React.ReactNode {
   const lines = content.split("\n");
   let currentLang: string | null = null;
@@ -305,21 +356,34 @@ export function renderHighlightedEditorLines(content: string): React.ReactNode {
       );
     }
 
-    if (line.includes("`")) {
-      const parts = line.split(/(`[^`]+`)/g);
+    if (/^---+$/.test(line.trim())) {
       return (
-        <div key={idx} className="tok-prose">
-          {parts.map((part, pIdx) =>
-            part.startsWith("`") && part.endsWith("`") && part.length >= 2 ? (
-              <span key={pIdx} className="tok-lang">{part}</span>
-            ) : (
-              <span key={pIdx}>{part}</span>
-            )
-          )}
+        <div key={idx} className="tok-bool">
+          {line}
         </div>
       );
     }
 
-    return <div key={idx} className="tok-prose">{line || "\u200B"}</div>;
+    const quoteMatch = line.match(/^([ \t]*>\s?)(.*)$/);
+    if (quoteMatch) {
+      return (
+        <div key={idx} className="tok-prose">
+          <span className="tok-bool">{quoteMatch[1]}</span>
+          {highlightProseInline(quoteMatch[2])}
+        </div>
+      );
+    }
+
+    const listMatch = line.match(/^([ \t]*(?:[-*+]|\d+[.)])\s)(.*)$/);
+    if (listMatch) {
+      return (
+        <div key={idx} className="tok-prose">
+          <span className="tok-bool">{listMatch[1]}</span>
+          {highlightProseInline(listMatch[2])}
+        </div>
+      );
+    }
+
+    return <div key={idx} className="tok-prose">{highlightProseInline(line)}</div>;
   });
 }
