@@ -68,6 +68,7 @@ export function SketchLoopArrow() {
 export function CornerHandwrittenNotes() {
   return (
     <div
+      className="doodle-corners"
       aria-hidden="true"
       style={{
         position: "fixed",

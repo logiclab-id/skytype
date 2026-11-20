@@ -1,6 +1,6 @@
-import { useMemo } from "react";
 import { BundleContent } from "@/components/bundle-content";
 import { parseMixedSections } from "@/core/formatters";
+import { useMemo } from "react";
 
 interface PreviewViewProps {
   content: string;
@@ -12,8 +12,8 @@ export function PreviewView({ content, onShowToast }: PreviewViewProps) {
 
   return (
     <div
+      className="preview-pad"
       style={{
-        padding: "1.35rem 1.6rem",
         minHeight: "340px",
         display: "flex",
         flexDirection: "column",
@@ -22,6 +22,7 @@ export function PreviewView({ content, onShowToast }: PreviewViewProps) {
         fontSize: "0.86rem",
         lineHeight: "1.6",
         color: "var(--ink)",
+        overflowWrap: "anywhere",
       }}
     >
       {sections.length === 0 ? (
@@ -31,7 +32,9 @@ export function PreviewView({ content, onShowToast }: PreviewViewProps) {
       ) : (
         <BundleContent
           sections={sections}
-          onCopyBlock={(lang) => onShowToast(`Copied ${lang.toUpperCase()} block`)}
+          onCopyBlock={(lang) =>
+            onShowToast(`Copied ${lang.toUpperCase()} block`)
+          }
         />
       )}
     </div>

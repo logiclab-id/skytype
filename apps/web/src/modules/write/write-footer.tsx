@@ -22,14 +22,21 @@ interface WriteFooterProps {
   onClear: () => void;
 }
 
-export function WriteFooter({ onInsertBlock, onBeautify, onClear }: WriteFooterProps) {
+export function WriteFooter({
+  onInsertBlock,
+  onBeautify,
+  onClear,
+}: WriteFooterProps) {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
   const langMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!langMenuOpen) return;
     const handleOutside = (e: MouseEvent) => {
-      if (langMenuRef.current && !langMenuRef.current.contains(e.target as Node)) {
+      if (
+        langMenuRef.current &&
+        !langMenuRef.current.contains(e.target as Node)
+      ) {
         setLangMenuOpen(false);
       }
     };
@@ -57,7 +64,15 @@ export function WriteFooter({ onInsertBlock, onBeautify, onClear }: WriteFooterP
         background: "var(--surface-sub)",
       }}
     >
-      <div ref={langMenuRef} style={{ position: "relative", display: "flex", alignItems: "center", gap: "0.4rem" }}>
+      <div
+        ref={langMenuRef}
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.4rem",
+        }}
+      >
         <button
           type="button"
           onClick={() => setLangMenuOpen((prev) => !prev)}
@@ -69,20 +84,7 @@ export function WriteFooter({ onInsertBlock, onBeautify, onClear }: WriteFooterP
         </button>
 
         {langMenuOpen && (
-          <div
-            className="clean-card"
-            style={{
-              position: "absolute",
-              bottom: "calc(100% + 6px)",
-              left: 0,
-              padding: "0.35rem",
-              display: "grid",
-              gridTemplateColumns: "repeat(3, minmax(84px, 1fr))",
-              gap: "0.25rem",
-              zIndex: 20,
-              boxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
-            }}
-          >
+          <div className="clean-card lang-menu">
             {CODE_LANGUAGES.map((lang) => (
               <button
                 key={lang.id || "plain"}
@@ -107,7 +109,12 @@ export function WriteFooter({ onInsertBlock, onBeautify, onClear }: WriteFooterP
       </div>
 
       <div style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
-        <button type="button" onClick={onBeautify} className="clean-btn" title="Auto-beautify JSON & YAML blocks">
+        <button
+          type="button"
+          onClick={onBeautify}
+          className="clean-btn"
+          title="Auto-beautify JSON & YAML blocks"
+        >
           Beautify
         </button>
         <button type="button" onClick={onClear} className="clean-btn">

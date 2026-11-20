@@ -88,7 +88,7 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
   }
 
   return (
-    <div style={{ minHeight: "100vh", position: "relative", display: "flex", flexDirection: "column", padding: "1rem 1.5rem 2.5rem" }}>
+    <div className="app-shell">
       <CornerHandwrittenNotes />
 
       <AppHeader
@@ -127,9 +127,8 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
             )}
 
             <section
-              className="clean-card"
+              className="clean-card preview-pad"
               style={{
-                padding: "1.35rem 1.6rem",
                 display: "flex",
                 flexDirection: "column",
                 gap: "0.75rem",
@@ -137,6 +136,7 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
                 fontSize: "0.86rem",
                 lineHeight: "1.6",
                 color: "var(--ink)",
+                overflowWrap: "anywhere",
               }}
             >
               <BundleContent

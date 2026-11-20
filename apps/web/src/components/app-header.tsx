@@ -34,28 +34,15 @@ export function AppHeader({
   };
 
   return (
-    <header
-      style={{
-        position: "relative",
-        zIndex: 1,
-        maxWidth: "880px",
-        width: "100%",
-        margin: "0 auto",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        paddingBottom: "0.8rem",
-        borderBottom: "1px solid var(--border)",
-      }}
-    >
+    <header className="app-header">
       {linkToHome ? (
-        <a href="/" style={brandStyle}>
+        <a href="/" className="app-header-brand" style={brandStyle}>
           Skytype
           <MarkerSwoosh color="var(--marker-warm)" />
         </a>
       ) : (
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
-          <span style={brandStyle}>
+          <span className="app-header-brand" style={brandStyle}>
             Skytype
             <MarkerSwoosh color="var(--marker-warm)" />
           </span>
@@ -63,7 +50,7 @@ export function AppHeader({
       )}
 
       {activeTab && onTabChange && (
-        <nav style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
+        <nav className="app-header-nav">
           {TABS.map((tab) => {
             const isActive = activeTab === tab.id;
             return (
@@ -91,7 +78,7 @@ export function AppHeader({
         </nav>
       )}
 
-      <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
+      <div className="app-header-actions">
         {rightAction}
         <ThemeSwitcher />
       </div>

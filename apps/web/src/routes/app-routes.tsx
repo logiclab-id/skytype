@@ -47,17 +47,7 @@ function WorkspaceRoute() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        height: activeTab === "write" ? "100vh" : undefined,
-        overflow: activeTab === "write" ? "hidden" : undefined,
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        padding: activeTab === "write" ? "1rem 1.5rem 1.15rem" : "1rem 1.5rem 2rem",
-      }}
-    >
+    <div className={activeTab === "write" ? "app-shell app-shell--write" : "app-shell"}>
       <CornerHandwrittenNotes />
 
       <AppHeader activeTab={activeTab} onTabChange={setActiveTab} />
@@ -106,7 +96,7 @@ function WorkspaceRoute() {
         {activeTab !== "docs" && (
           <div style={{ marginTop: "1.25rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
             <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
-              <div style={{ position: "absolute", right: "108%", top: "-6px", display: "flex", alignItems: "center", gap: "0.15rem", color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
+              <div className="share-loop-hint" style={{ position: "absolute", right: "108%", top: "-6px", display: "flex", alignItems: "center", gap: "0.15rem", color: "var(--ink-muted)", whiteSpace: "nowrap" }}>
                 <span style={{ fontFamily: "var(--font-hand)", fontSize: "1.2rem", transform: "rotate(-5deg)" }}>
                   locked in browser!
                 </span>

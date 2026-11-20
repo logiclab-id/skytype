@@ -31,19 +31,8 @@ export function WriteToolbar({
   onPreview,
 }: WriteToolbarProps) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: "0.4rem",
-        padding: "0.5rem 0.85rem",
-        borderBottom: "1px solid var(--border)",
-        background: "var(--surface-sub)",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: "0.15rem", flexWrap: "wrap" }}>
+    <div className="write-toolbar">
+      <div className="write-toolbar-group">
         <button type="button" className="tb-icon" style={{ fontWeight: 700 }} title="Bold" onClick={() => onWrapSelection("**", "**", "bold")}>B</button>
         <button type="button" className="tb-icon" style={{ fontStyle: "italic" }} title="Italic" onClick={() => onWrapSelection("*", "*", "italic")}>I</button>
         <button type="button" className="tb-icon" style={{ textDecoration: "line-through" }} title="Strikethrough" onClick={() => onWrapSelection("~~", "~~", "strike")}>S</button>
@@ -64,7 +53,7 @@ export function WriteToolbar({
         <button type="button" className="tb-icon" title="Divider" onClick={() => onPrefixLine("---\n")}>—</button>
       </div>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
+      <div className="write-toolbar-actions">
         <button type="button" className="tb-icon" title="Undo" disabled={!canUndo} onClick={onUndo}><IconUndo /></button>
         <button type="button" className="tb-icon" title="Redo" disabled={!canRedo} onClick={onRedo}><IconRedo /></button>
         <button

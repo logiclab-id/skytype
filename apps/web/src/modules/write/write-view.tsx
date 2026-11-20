@@ -38,23 +38,11 @@ export function WriteView({ write, onPreview }: WriteViewProps) {
         </div>
       )}
 
-      <div style={{ display: "flex", height: "clamp(300px, calc(100vh - 295px), 620px)", overflow: "hidden" }}>
+      <div className="editor-pane">
         <div
           ref={write.gutterRef}
           aria-hidden="true"
-          style={{
-            width: "46px",
-            padding: "0.95rem 0.55rem",
-            textAlign: "right",
-            fontFamily: "var(--font-mono)",
-            fontSize: "0.8rem",
-            lineHeight: "1.6",
-            color: "var(--ink-muted)",
-            opacity: 0.55,
-            borderRight: "1px solid var(--border)",
-            userSelect: "none",
-            overflow: "hidden",
-          }}
+          className="editor-gutter"
         >
           {Array.from({ length: write.lineCount }, (_, i) => (
             <div key={i}>{i + 1}</div>
@@ -65,16 +53,11 @@ export function WriteView({ write, onPreview }: WriteViewProps) {
           <pre
             ref={write.backdropRef}
             aria-hidden="true"
+            className="editor-content"
             style={{
               position: "absolute",
               inset: 0,
-              padding: "0.95rem 1.15rem",
               margin: 0,
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.86rem",
-              lineHeight: "1.6",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
               overflow: "hidden",
               pointerEvents: "none",
               color: "var(--ink)",
@@ -90,7 +73,7 @@ export function WriteView({ write, onPreview }: WriteViewProps) {
             onPaste={write.handlePaste}
             onKeyDown={write.handleKeyDown}
             onScroll={write.syncScroll}
-            className={write.editorScrolling ? "is-scrolling" : ""}
+            className={`editor-content${write.editorScrolling ? " is-scrolling" : ""}`}
             placeholder="Start writing markdown, code blocks, or notes here..."
             spellCheck={false}
             style={{
@@ -98,18 +81,12 @@ export function WriteView({ write, onPreview }: WriteViewProps) {
               zIndex: 1,
               width: "100%",
               height: "100%",
-              padding: "0.95rem 1.15rem",
               background: "transparent",
               border: "none",
               outline: "none",
               resize: "none",
               color: write.content ? "transparent" : "var(--ink)",
               caretColor: "var(--ink)",
-              fontFamily: "var(--font-mono)",
-              fontSize: "0.86rem",
-              lineHeight: "1.6",
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
             }}
           />
         </div>

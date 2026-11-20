@@ -36,8 +36,8 @@ const BUTTON_GUIDE = [
 export function DocsView() {
   return (
     <div
+      className="docs-pad"
       style={{
-        padding: "1.6rem 1.75rem",
         display: "flex",
         flexDirection: "column",
         gap: "1.5rem",
@@ -64,18 +64,11 @@ export function DocsView() {
         </p>
       </div>
 
-      <div
-        style={{
-          border: "1px solid var(--border)",
-          borderRadius: "10px",
-          background: "#101010",
-          padding: "0.85rem",
-        }}
-      >
+      <div className="docs-diagram-wrap">
         <svg
           viewBox="0 0 760 320"
           fill="none"
-          style={{ width: "100%", height: "auto", display: "block" }}
+          className="docs-diagram-svg"
           aria-label="Annotated handwritten guide of Skytype UI"
         >
 
@@ -166,7 +159,7 @@ export function DocsView() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(min(260px, 100%), 1fr))",
             gap: "0.6rem",
           }}
         >
