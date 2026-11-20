@@ -13,4 +13,4 @@ Skytype lets developers paste API responses, code snippets, JSON, YAML, or Markd
 
 ## Collaborators
 - [logiclab.id](https://logiclab.id)
-- [rizantohannan.com](https://rizantohannan.com)
+- [raishannan.com](https://raishannan.com)

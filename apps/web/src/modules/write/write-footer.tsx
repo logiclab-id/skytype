@@ -28,7 +28,17 @@ export function WriteFooter({
   onClear,
 }: WriteFooterProps) {
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [renderMenu, setRenderMenu] = useState(false);
   const langMenuRef = useRef<HTMLDivElement | null>(null);
+
+  const openMenu = () => {
+    setRenderMenu(true);
+    setLangMenuOpen(true);
+  };
+
+  const closeMenu = () => {
+    setLangMenuOpen(false);
+  };
 
   useEffect(() => {
     if (!langMenuOpen) return;
@@ -37,11 +47,11 @@ export function WriteFooter({
         langMenuRef.current &&
         !langMenuRef.current.contains(e.target as Node)
       ) {
-        setLangMenuOpen(false);
+        closeMenu();
       }
     };
     const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLangMenuOpen(false);
+      if (e.key === "Escape") closeMenu();
     };
     document.addEventListener("mousedown", handleOutside);
     document.addEventListener("keydown", handleEsc);
@@ -75,7 +85,7 @@ export function WriteFooter({
       >
         <button
           type="button"
-          onClick={() => setLangMenuOpen((prev) => !prev)}
+          onClick={() => (langMenuOpen ? closeMenu() : openMenu())}
           className="clean-btn"
           style={{ fontSize: "0.82rem" }}
           title="Insert a formatted code block (JSON, YAML, PHP, etc.)"
@@ -83,14 +93,20 @@ export function WriteFooter({
           Format ▾
         </button>
 
-        {langMenuOpen && (
-          <div className="clean-card lang-menu">
+        {renderMenu && (
+          <div
+            className="clean-card lang-menu"
+            data-state={langMenuOpen ? "open" : "closing"}
+            onAnimationEnd={() => {
+              if (!langMenuOpen) setRenderMenu(false);
+            }}
+          >
             {CODE_LANGUAGES.map((lang) => (
               <button
                 key={lang.id || "plain"}
                 type="button"
                 onClick={() => {
-                  setLangMenuOpen(false);
+                  closeMenu();
                   onInsertBlock(lang.id);
                 }}
                 className="clean-btn"

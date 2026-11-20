@@ -459,6 +459,62 @@ pre.is-scrolling::-webkit-scrollbar-thumb,
   display: block;
 }
 
+@keyframes genieIn {
+  0% {
+    opacity: 0;
+    clip-path: polygon(8% 82%, 20% 82%, 18% 100%, 10% 100%);
+    transform: perspective(200px) translateY(24px) rotateX(-64deg) scaleX(0.04) scaleY(0.02);
+  }
+  20% {
+    opacity: 0.95;
+    clip-path: polygon(2% 40%, 75% 40%, 20% 100%, 8% 100%);
+    transform: perspective(200px) translateY(14px) rotateX(-52deg) scaleX(0.26) scaleY(0.42);
+  }
+  45% {
+    opacity: 1;
+    clip-path: polygon(0% 8%, 100% 8%, 24% 100%, 4% 100%);
+    transform: perspective(200px) translateY(5px) rotateX(-30deg) scaleX(0.66) scaleY(0.84);
+  }
+  72% {
+    opacity: 1;
+    clip-path: polygon(0% 0%, 100% 0%, 78% 100%, 0% 100%);
+    transform: perspective(200px) translateY(1px) rotateX(-10deg) scaleX(0.92) scaleY(0.97);
+  }
+  100% {
+    opacity: 1;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transform: perspective(200px) translateY(0px) rotateX(0deg) scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes genieOut {
+  0% {
+    opacity: 1;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    transform: perspective(200px) translateY(0px) rotateX(0deg) scaleX(1) scaleY(1);
+  }
+  25% {
+    opacity: 1;
+    clip-path: polygon(0% 0%, 100% 0%, 42% 100%, 2% 100%);
+    transform: perspective(200px) translateY(2px) rotateX(-18deg) scaleX(0.86) scaleY(0.96);
+  }
+  52% {
+    opacity: 1;
+    clip-path: polygon(0% 12%, 100% 12%, 22% 100%, 6% 100%);
+    transform: perspective(200px) translateY(8px) rotateX(-40deg) scaleX(0.52) scaleY(0.76);
+  }
+  78% {
+    opacity: 0.95;
+    clip-path: polygon(4% 48%, 60% 48%, 20% 100%, 8% 100%);
+    transform: perspective(200px) translateY(17px) rotateX(-56deg) scaleX(0.18) scaleY(0.32);
+  }
+  100% {
+    opacity: 0;
+    clip-path: polygon(8% 82%, 20% 82%, 18% 100%, 10% 100%);
+    transform: perspective(200px) translateY(24px) rotateX(-64deg) scaleX(0.02) scaleY(0.01);
+  }
+}
+
 .lang-menu {
   position: absolute;
   bottom: calc(100% + 6px);
@@ -468,7 +524,19 @@ pre.is-scrolling::-webkit-scrollbar-thumb,
   grid-template-columns: repeat(3, minmax(84px, 1fr));
   gap: 0.25rem;
   z-index: 20;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  transform-origin: 28px 100%;
+  backface-visibility: hidden;
+  will-change: transform, opacity, clip-path;
+}
+
+.lang-menu[data-state="open"] {
+  animation: genieIn 0.26s linear forwards;
+}
+
+.lang-menu[data-state="closing"] {
+  pointer-events: none;
+  animation: genieOut 0.22s linear forwards;
 }
 
 @media (max-width: 1024px) {
