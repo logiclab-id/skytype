@@ -3,8 +3,149 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Skytype | E2E Encrypted Snippet Bundler</title>
+    <meta
+      name="description"
+      content="Skytype is a zero-history, end-to-end encrypted snippet and API response bundler. Format JSON or YAML, encrypt with AES-GCM, and share a private link."
+    />
+    <meta
+      name="keywords"
+      content="skytype, snippet bundler, end-to-end encrypted paste, e2e encrypted pastebin, zero history, client-side encryption, aes-gcm, json formatter, yaml formatter, api response viewer, developer tools, logiclab.id, rizantohannan.com"
+    />
+    <meta name="application-name" content="Skytype" />
+    <meta name="apple-mobile-web-app-title" content="Skytype" />
+    <meta name="author" content="logiclab.id, rizantohannan.com" />
+    <meta name="creator" content="logiclab.id, rizantohannan.com" />
+    <meta name="publisher" content="logiclab.id" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f6f2" media="(prefers-color-scheme: light)" />
+    <link rel="canonical" href="/" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Skytype" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:title" content="Skytype | E2E Encrypted Snippet Bundler" />
+    <meta
+      property="og:description"
+      content="Zero-history, browser-side AES-GCM encrypted snippet &amp; API response bundler. Format JSON or YAML and share a single private link."
+    />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Skytype" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Skytype | E2E Encrypted Snippet Bundler" />
+    <meta
+      name="twitter:description"
+      content="Zero-history, client-side E2E encrypted snippet &amp; API response bundler. Built in collaboration with logiclab.id &amp; rizantohannan.com."
+    />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Icons & Manifest -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Typely -  Snippet Bundler</title>
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://logiclab.id/#organization",
+            "name": "logiclab.id",
+            "url": "https://logiclab.id"
+          },
+          {
+            "@type": "Person",
+            "@id": "https://rizantohannan.com/#person",
+            "name": "rizantohannan.com",
+            "url": "https://rizantohannan.com"
+          },
+          {
+            "@type": "WebSite",
+            "name": "Skytype",
+            "publisher": {
+              "@id": "https://logiclab.id/#organization"
+            },
+            "creator": [
+              { "@id": "https://logiclab.id/#organization" },
+              { "@id": "https://rizantohannan.com/#person" }
+            ]
+          },
+          {
+            "@type": "WebApplication",
+            "name": "Skytype",
+            "alternateName": "Skytype Snippet Bundler",
+            "applicationCategory": "DeveloperApplication",
+            "operatingSystem": "Web",
+            "isAccessibleForFree": true,
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            },
+            "description": "Minimal, zero-history SaaS for bundling API responses, code snippets, and notes with formatters (JSON, YAML, Markdown) into a single end-to-end encrypted shareable link.",
+            "featureList": [
+              "Client-side AES-GCM end-to-end encryption",
+              "Zero-history stateless privacy",
+              "Auto-formatting for JSON, YAML, PHP, TypeScript, and Markdown",
+              "URL fragment decryption key sharing"
+            ],
+            "author": [
+              { "@id": "https://logiclab.id/#organization" },
+              { "@id": "https://rizantohannan.com/#person" }
+            ],
+            "contributor": [
+              { "@id": "https://logiclab.id/#organization" },
+              { "@id": "https://rizantohannan.com/#person" }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "What is Skytype?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Skytype is a minimal, zero-history web app for bundling API responses, code snippets, and notes with auto-formatting into a single end-to-end encrypted shareable link."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "How does end-to-end encryption work in Skytype?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "All encryption and decryption run locally in your browser using the Web Crypto API (AES-GCM). Only opaque ciphertext is uploaded, and the decryption key stays exclusively in the URL #fragment."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Does Skytype store user accounts or history?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No. Skytype has zero user accounts, zero tracking history, and zero server-side parsing of your snippet contents."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    </script>
+
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,6 +155,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <main>
+        <h1>Skytype</h1>
+        <p>
+          Bundle API responses, code snippets, and notes with JSON/YAML formatting and share them via
+          a single end-to-end encrypted link. Collaboration by
+          <a href="https://logiclab.id" rel="noopener noreferrer">logiclab.id</a> and
+          <a href="https://rizantohannan.com" rel="noopener noreferrer">rizantohannan.com</a>.
+        </p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

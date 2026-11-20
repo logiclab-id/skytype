@@ -57,7 +57,7 @@ export function DocsView() {
             lineHeight: 1.05,
           }}
         >
-          How Typely Works
+          How Skytype Works
         </h2>
         <p style={{ color: "var(--ink-muted)", marginTop: "0.35rem", fontSize: "0.84rem" }}>
           Zero history E2E encrypted bundler for code snippets, API responses, and notes in one place.
@@ -76,7 +76,7 @@ export function DocsView() {
           viewBox="0 0 760 320"
           fill="none"
           style={{ width: "100%", height: "auto", display: "block" }}
-          aria-label="Annotated handwritten guide of Typely UI"
+          aria-label="Annotated handwritten guide of Skytype UI"
         >
 
           <rect x="135" y="42" width="490" height="210" rx="8" fill="#181818" stroke="#2c2c2c" strokeWidth="1.5" />
@@ -189,6 +189,38 @@ export function DocsView() {
             </div>
           ))}
         </div>
+      </div>
+
+      <div
+        style={{
+          paddingTop: "0.85rem",
+          borderTop: "1px solid var(--border)",
+          fontSize: "0.78rem",
+          color: "var(--ink-muted)",
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "0.35rem",
+          alignItems: "center",
+        }}
+      >
+        <span>Built in collaboration by</span>
+        <a
+          href="https://logiclab.id"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "var(--accent)", textDecoration: "underline" }}
+        >
+          logiclab.id
+        </a>
+        <span>&amp;</span>
+        <a
+          href="https://rizantohannan.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: "var(--accent)", textDecoration: "underline" }}
+        >
+          rizantohannan.com
+        </a>
       </div>
     </div>
   );

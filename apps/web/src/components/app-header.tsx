@@ -50,13 +50,13 @@ export function AppHeader({
     >
       {linkToHome ? (
         <a href="/" style={brandStyle}>
-          Typely
+          Skytype
           <MarkerSwoosh color="var(--marker-warm)" />
         </a>
       ) : (
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <span style={brandStyle}>
-            Typely
+            Skytype
             <MarkerSwoosh color="var(--marker-warm)" />
           </span>
         </div>

@@ -1,0 +1,16 @@
+# Skytype
+
+> Minimal, zero-history, end-to-end encrypted snippet and API response bundler.
+
+## Overview
+Skytype lets developers paste API responses, code snippets, JSON, YAML, or Markdown notes, format them cleanly, and share them via a single end-to-end encrypted link.
+
+## Privacy & Security Architecture
+- **Client-side AES-GCM encryption**: All encryption and decryption happen locally in the browser using the Web Crypto API.
+- **Zero-knowledge backend**: Only opaque ciphertext blobs are stored on the server; plaintext and encryption keys are never sent to the API.
+- **URL fragment keys**: Decryption keys live strictly in the URL `#fragment`, which is never transmitted to servers.
+- **Zero history**: No user accounts, no login flows, and no per-user history lists.
+
+## Collaborators
+- [logiclab.id](https://logiclab.id)
+- [rizantohannan.com](https://rizantohannan.com)

@@ -34,5 +34,7 @@ public static class AppSetup
     {
         app.InitializeDatabase();
         app.UseCors(CorsPolicyName);
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
     }
 }

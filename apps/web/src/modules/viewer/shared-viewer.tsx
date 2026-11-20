@@ -19,6 +19,17 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
   const { toast, showToast } = useToast();
 
   useEffect(() => {
+    const robotsMeta = document.querySelector('meta[name="robots"]');
+    const prevContent = robotsMeta?.getAttribute("content") ?? null;
+    robotsMeta?.setAttribute("content", "noindex, nofollow");
+    return () => {
+      if (robotsMeta && prevContent !== null) {
+        robotsMeta.setAttribute("content", prevContent);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const keyFragment = window.location.hash.replace(/^#/, "");
     if (!keyFragment) {
       setError("Missing decryption key in URL fragment.");
@@ -38,7 +49,7 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
 
         const title = parsed.title ?? "";
         const description = parsed.description ?? "";
-        if (title) document.title = `${title} — Typely`;
+        if (title) document.title = `${title} | Skytype`;
         setData({
           title,
           description,

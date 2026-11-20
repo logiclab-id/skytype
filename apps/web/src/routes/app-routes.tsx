@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { AppHeader } from "@/components/app-header";
 import {
   CornerHandwrittenNotes,
@@ -29,6 +30,15 @@ function WorkspaceRoute() {
     onShowToast: showToast,
     onClear: () => setMagicLink(null),
   });
+
+  useEffect(() => {
+    const titles: Record<typeof activeTab, string> = {
+      write: "Skytype",
+      preview: "Skytype | Preview",
+      docs: "Skytype | Docs",
+    };
+    document.title = titles[activeTab];
+  }, [activeTab]);
 
   const handleOpenShareModal = () => {
     if (!write.content.trim()) return;
@@ -64,6 +74,7 @@ function WorkspaceRoute() {
           flexDirection: "column",
         }}
       >
+        <h1 className="sr-only">Skytype</h1>
         {activeTab === "write" && (
           <div
             style={{

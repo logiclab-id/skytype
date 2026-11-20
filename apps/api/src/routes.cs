@@ -16,5 +16,7 @@ public static class Routes
         }));
 
         api.MapBundleRoutes();
+
+        app.MapFallbackToFile("index.html");
     }
 }
