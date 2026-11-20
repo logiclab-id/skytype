@@ -4,6 +4,7 @@ import {
   CornerHandwrittenNotes,
   HandwrittenToast,
   IconLock,
+  MarkerSwoosh,
   SketchLoopArrow,
 } from "@/components/doodles";
 import { DocsView } from "@/modules/docs/docs-view";
@@ -137,10 +138,73 @@ function WorkspaceRoute() {
   );
 }
 
+function NotFoundRoute() {
+  useEffect(() => {
+    document.title = "404 | Skytype";
+  }, []);
+
+  return (
+    <div className="app-shell">
+      <CornerHandwrittenNotes />
+      <AppHeader
+        linkToHome
+        rightAction={
+          <a href="/" className="clean-btn" style={{ textDecoration: "none" }}>
+            New Bundle
+          </a>
+        }
+      />
+      <main style={{ maxWidth: "840px", width: "100%", margin: "1.4rem auto 0" }}>
+        <div
+          className="clean-card"
+          style={{
+            padding: "2.5rem 1.5rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            gap: "0.75rem",
+          }}
+        >
+          <span
+            style={{
+              position: "relative",
+              display: "inline-block",
+              fontFamily: "var(--font-hand)",
+              fontSize: "3.5rem",
+              fontWeight: 700,
+              lineHeight: 1,
+              color: "var(--ink)",
+              transform: "rotate(-2deg)",
+            }}
+          >
+            404
+            <MarkerSwoosh color="var(--marker-warm)" />
+          </span>
+          <h1 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--ink)", marginTop: "0.25rem" }}>
+            Page not found
+          </h1>
+          <p style={{ fontSize: "0.88rem", color: "var(--ink-muted)", maxWidth: "420px", lineHeight: 1.55 }}>
+            This link does not exist or has expired.
+          </p>
+          <a href="/" className="clean-btn" style={{ marginTop: "0.5rem", textDecoration: "none" }}>
+            Write a new note
+          </a>
+        </div>
+      </main>
+    </div>
+  );
+}
+
 export function AppRoutes() {
-  const sharedRouteMatch = window.location.pathname.match(/^\/s\/([^/]+)$/);
+  const { pathname } = window.location;
+  const sharedRouteMatch = pathname.match(/^\/s\/([^/]+)$/);
   if (sharedRouteMatch) {
     return <SharedViewer bundleId={sharedRouteMatch[1]} />;
+  }
+
+  if (pathname !== "/" && pathname !== "") {
+    return <NotFoundRoute />;
   }
 
   return <WorkspaceRoute />;

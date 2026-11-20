@@ -36,12 +36,14 @@ export function ShareDialog({
 }: ShareDialogProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [maxReaders, setMaxReaders] = useState("3");
   const [sharing, setSharing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleDone = () => {
     setTitle("");
     setDescription("");
+    setMaxReaders("3");
     setError(null);
     onOpenChange(false);
     onDone();
@@ -67,10 +69,15 @@ export function ShareDialog({
         description: description.trim(),
         content,
       };
+      const parsedMaxReaders = Math.min(
+        100,
+        Math.max(1, Number.parseInt(maxReaders, 10) || 3),
+      );
       const encrypted = await encryptBundle(JSON.stringify(payload));
       const data = await createEncryptedBundle({
         ciphertext: encrypted.ciphertext,
         iv: encrypted.iv,
+        maxReaders: parsedMaxReaders,
       });
       onMagicLinkCreated(
         `${window.location.origin}/s/${data.id}#${encrypted.keyFragment}`,
@@ -109,7 +116,7 @@ export function ShareDialog({
               <DialogDescription>
                 Encrypted in your browser before it leaves this page.
                 <br />
-                Zero history only people with the link can read it.
+                Zero history readable up to your unique reader limit.
               </DialogDescription>
             </DialogHeader>
 
@@ -142,6 +149,44 @@ export function ShareDialog({
                   maxLength={280}
                   rows={3}
                 />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <Label htmlFor="share-max-readers">Max readers</Label>
+                <div className="flex items-center gap-1.5">
+                  <Input
+                    id="share-max-readers"
+                    type="number"
+                    min={1}
+                    max={100}
+                    value={maxReaders}
+                    onChange={(e) => setMaxReaders(e.target.value)}
+                    className="h-8 w-16 px-2.5 text-xs"
+                  />
+                  {[1, 3, 5, 10].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setMaxReaders(String(preset))}
+                      className="clean-btn"
+                      style={{
+                        height: "32px",
+                        padding: "0 0.55rem",
+                        fontSize: "0.75rem",
+                        borderColor:
+                          maxReaders === String(preset)
+                            ? "var(--accent)"
+                            : undefined,
+                        color:
+                          maxReaders === String(preset)
+                            ? "var(--ink)"
+                            : undefined,
+                      }}
+                    >
+                      {preset}x
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {error && (

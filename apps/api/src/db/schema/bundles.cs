@@ -7,4 +7,6 @@ public class Bundle
     public string Iv { get; set; } = string.Empty;
     public DateTimeOffset CreatedAt { get; set; }
     public DateTimeOffset? ExpiresAt { get; set; }
+    public int MaxReaders { get; set; } = 3;
+    public List<string> ReaderHashes { get; set; } = [];
 }

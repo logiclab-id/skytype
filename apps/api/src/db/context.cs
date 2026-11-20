@@ -36,6 +36,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .HasColumnName("expires_at")
                 .HasDefaultValueSql("NOW() + INTERVAL '1 year'");
 
+            entity.Property(e => e.MaxReaders)
+                .HasColumnName("max_readers")
+                .HasDefaultValue(3)
+                .IsRequired();
+
+            entity.Property(e => e.ReaderHashes)
+                .HasColumnName("reader_hashes")
+                .HasColumnType("text[]")
+                .HasDefaultValueSql("'{}'::text[]")
+                .IsRequired();
+
             entity.HasIndex(e => e.CreatedAt)
                 .HasDatabaseName("ix_bundles_created_at");
         });

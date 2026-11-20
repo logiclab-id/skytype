@@ -18,4 +18,6 @@ export interface SharedBundleData {
 export interface EncryptedBundleDto {
   ciphertext: string;
   iv: string;
+  maxReaders?: number;
+  readersUsed?: number;
 }

@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppHeader } from "@/components/app-header";
 import { BundleContent } from "@/components/bundle-content";
-import { CornerHandwrittenNotes, HandwrittenToast } from "@/components/doodles";
-import { fetchEncryptedBundle } from "@/core/bundle-api";
+import { CornerHandwrittenNotes, HandwrittenToast, MarkerSwoosh } from "@/components/doodles";
+import { BundleApiError, fetchEncryptedBundle } from "@/core/bundle-api";
 import { decryptBundle } from "@/core/crypto";
 import { parseMixedSections } from "@/core/formatters";
 import { useToast } from "@/hooks/use-toast";
@@ -14,8 +14,9 @@ interface SharedViewerProps {
 
 export function SharedViewer({ bundleId }: SharedViewerProps) {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<{ code?: number; message: string } | null>(null);
   const [data, setData] = useState<SharedBundleData | null>(null);
+  const [readerInfo, setReaderInfo] = useState<{ used: number; max: number } | null>(null);
   const { toast, showToast } = useToast();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
   useEffect(() => {
     const keyFragment = window.location.hash.replace(/^#/, "");
     if (!keyFragment) {
-      setError("Missing decryption key in URL fragment.");
+      setError({ code: 404, message: "This link is invalid, expired, or missing its decryption key." });
       setLoading(false);
       return;
     }
@@ -42,7 +43,7 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
     setError(null);
 
     fetchEncryptedBundle(bundleId)
-      .then(async ({ ciphertext, iv }) => {
+      .then(async ({ ciphertext, iv, readersUsed, maxReaders }) => {
         const plain = await decryptBundle(ciphertext, iv, keyFragment);
         const parsed = JSON.parse(plain) as Partial<SharedBundleData>;
         if (cancelled) return;
@@ -50,6 +51,9 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
         const title = parsed.title ?? "";
         const description = parsed.description ?? "";
         if (title) document.title = `${title} | Skytype`;
+        if (typeof readersUsed === "number" && typeof maxReaders === "number") {
+          setReaderInfo({ used: readersUsed, max: maxReaders });
+        }
         setData({
           title,
           description,
@@ -58,7 +62,14 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
       })
       .catch((err: unknown) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Failed to decrypt bundle.");
+          if (err instanceof BundleApiError) {
+            setError({ code: err.status, message: err.message });
+          } else {
+            setError({
+              code: 404,
+              message: "This link is invalid, expired, or has been corrupted.",
+            });
+          }
         }
       })
       .finally(() => {
@@ -95,6 +106,21 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
         linkToHome
         rightAction={
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            {readerInfo && (
+              <span
+                style={{
+                  fontSize: "0.75rem",
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--ink-muted)",
+                  padding: "0.25rem 0.5rem",
+                  border: "1px solid var(--border)",
+                  borderRadius: "6px",
+                }}
+                title="Unique readers who have accessed this bundle"
+              >
+                {readerInfo.used}/{readerInfo.max} readers
+              </span>
+            )}
             <a href="/" className="clean-btn" style={{ textDecoration: "none" }}>
               New Bundle
             </a>
@@ -104,8 +130,52 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
 
       <main style={{ maxWidth: "840px", width: "100%", margin: "1.4rem auto 0", display: "flex", flexDirection: "column", gap: "1rem" }}>
         {error && (
-          <div className="clean-card" style={{ padding: "1.5rem", color: "var(--danger)", borderColor: "var(--danger)", fontSize: "0.9rem" }}>
-            {error}
+          <div
+            className="clean-card"
+            style={{
+              padding: "2.5rem 1.5rem",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              gap: "0.75rem",
+            }}
+          >
+            <span
+              style={{
+                position: "relative",
+                display: "inline-block",
+                fontFamily: "var(--font-hand)",
+                fontSize: "3.5rem",
+                fontWeight: 700,
+                lineHeight: 1,
+                color: "var(--ink)",
+                transform: "rotate(-2deg)",
+              }}
+            >
+              {error.code ?? "Oops"}
+              <MarkerSwoosh color="var(--marker-warm)" />
+            </span>
+
+            <h1 style={{ fontSize: "1.05rem", fontWeight: 600, color: "var(--ink)", marginTop: "0.25rem" }}>
+              {error.code === 404
+                ? "Bundle expired or not found"
+                : error.code === 410
+                  ? "Reader limit reached"
+                  : "Unable to open bundle"}
+            </h1>
+
+            <p style={{ fontSize: "0.88rem", color: "var(--ink-muted)", maxWidth: "420px", lineHeight: 1.55 }}>
+              {error.message}
+            </p>
+
+            <a
+              href="/"
+              className="clean-btn"
+              style={{ marginTop: "0.5rem", textDecoration: "none" }}
+            >
+              Write a new note
+            </a>
           </div>
         )}
 

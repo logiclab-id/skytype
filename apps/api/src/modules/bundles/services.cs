@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Skytype.Api.Src.Db;
 using Skytype.Api.Src.Db.Schema;
@@ -16,6 +18,8 @@ public sealed class BundlesService(AppDbContext db)
             Iv = req.Iv,
             CreatedAt = now,
             ExpiresAt = now.AddYears(1),
+            MaxReaders = req.MaxReaders ?? BundlesSchema.DefaultMaxReaders,
+            ReaderHashes = [],
         };
 
         db.Bundles.Add(bundle);
@@ -24,22 +28,44 @@ public sealed class BundlesService(AppDbContext db)
         return new CreateBundleResponse(bundle.Id);
     }
 
-    public async Task<BundleResponse?> GetByIdAsync(Guid id, CancellationToken ct)
+    public async Task<BundleReadResult> GetByIdAsync(Guid id, string readerKey, CancellationToken ct)
     {
         var bundle = await db.Bundles
-            .AsNoTracking()
             .FirstOrDefaultAsync(b => b.Id == id, ct);
 
         if (bundle is null || (bundle.ExpiresAt.HasValue && bundle.ExpiresAt <= DateTimeOffset.UtcNow))
         {
-            return null;
+            return new BundleReadResult(BundleReadStatus.NotFound);
         }
 
-        return new BundleResponse(
-            bundle.Id,
-            bundle.Ciphertext,
-            bundle.Iv,
-            bundle.CreatedAt
+        var readerHash = ComputeReaderHash(id, readerKey);
+        if (!bundle.ReaderHashes.Contains(readerHash))
+        {
+            if (bundle.ReaderHashes.Count >= bundle.MaxReaders)
+            {
+                return new BundleReadResult(BundleReadStatus.ReaderLimitReached, MaxReaders: bundle.MaxReaders);
+            }
+
+            bundle.ReaderHashes = [.. bundle.ReaderHashes, readerHash];
+            await db.SaveChangesAsync(ct);
+        }
+
+        return new BundleReadResult(
+            BundleReadStatus.Found,
+            new BundleResponse(
+                bundle.Id,
+                bundle.Ciphertext,
+                bundle.Iv,
+                bundle.CreatedAt,
+                bundle.ReaderHashes.Count,
+                bundle.MaxReaders
+            )
         );
+    }
+
+    private static string ComputeReaderHash(Guid bundleId, string readerKey)
+    {
+        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes($"{bundleId:N}:{readerKey}"));
+        return Convert.ToHexString(bytes).ToLowerInvariant();
     }
 }

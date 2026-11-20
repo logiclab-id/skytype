@@ -1,5 +1,21 @@
 import type { EncryptedBundleDto } from "@/types/bundle";
 
+const READER_ID_KEY = "skytype-reader-id";
+let fallbackReaderId: string | null = null;
+
+function getReaderToken(): string {
+  try {
+    const existing = window.localStorage.getItem(READER_ID_KEY);
+    if (existing) return existing;
+    const created = crypto.randomUUID();
+    window.localStorage.setItem(READER_ID_KEY, created);
+    return created;
+  } catch {
+    if (!fallbackReaderId) fallbackReaderId = crypto.randomUUID();
+    return fallbackReaderId;
+  }
+}
+
 export async function createEncryptedBundle(
   payload: EncryptedBundleDto
 ): Promise<{ id: string }> {
@@ -16,14 +32,35 @@ export async function createEncryptedBundle(
   return res.json() as Promise<{ id: string }>;
 }
 
+export class BundleApiError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+  }
+}
+
 export async function fetchEncryptedBundle(
   bundleId: string
 ): Promise<EncryptedBundleDto> {
-  const res = await fetch(`/api/bundles/${encodeURIComponent(bundleId)}`);
+  const res = await fetch(`/api/bundles/${encodeURIComponent(bundleId)}`, {
+    headers: {
+      "X-Reader-Token": getReaderToken(),
+    },
+  });
 
   if (!res.ok) {
-    throw new Error(
-      res.status === 404 ? "Bundle not found." : `HTTP ${res.status}`
+    if (res.status === 410) {
+      const body = (await res.json().catch(() => null)) as { error?: string } | null;
+      throw new BundleApiError(
+        410,
+        body?.error ?? "Access limit reached: this bundle has already been read by 3 different users."
+      );
+    }
+    throw new BundleApiError(
+      res.status,
+      res.status === 404 ? "This bundle has expired or does not exist." : `HTTP ${res.status}`
     );
   }
 
