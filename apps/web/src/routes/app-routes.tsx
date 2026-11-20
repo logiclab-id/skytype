@@ -124,6 +124,11 @@ function WorkspaceRoute() {
         content={write.content}
         magicLink={magicLink}
         onMagicLinkCreated={setMagicLink}
+        onDone={() => {
+          write.handleClear();
+          setActiveTab("write");
+          window.scrollTo({ top: 0 });
+        }}
         onShowToast={showToast}
       />
 

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { IconLock, MarkerSwoosh } from "@/components/doodles";
 import { Button } from "@/components/ui/button";
 import {
@@ -14,6 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { createEncryptedBundle } from "@/core/bundle-api";
 import { encryptBundle } from "@/core/crypto";
 import type { BundlePayload } from "@/types/bundle";
+import { useState } from "react";
 
 interface ShareDialogProps {
   open: boolean;
@@ -21,6 +21,7 @@ interface ShareDialogProps {
   content: string;
   magicLink: string | null;
   onMagicLinkCreated: (link: string | null) => void;
+  onDone: () => void;
   onShowToast: (msg: string) => void;
 }
 
@@ -30,12 +31,21 @@ export function ShareDialog({
   content,
   magicLink,
   onMagicLinkCreated,
+  onDone,
   onShowToast,
 }: ShareDialogProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [sharing, setSharing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const handleDone = () => {
+    setTitle("");
+    setDescription("");
+    setError(null);
+    onOpenChange(false);
+    onDone();
+  };
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (nextOpen) {
@@ -62,9 +72,13 @@ export function ShareDialog({
         ciphertext: encrypted.ciphertext,
         iv: encrypted.iv,
       });
-      onMagicLinkCreated(`${window.location.origin}/s/${data.id}#${encrypted.keyFragment}`);
+      onMagicLinkCreated(
+        `${window.location.origin}/s/${data.id}#${encrypted.keyFragment}`,
+      );
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to create magic link");
+      setError(
+        err instanceof Error ? err.message : "Failed to create magic link",
+      );
     } finally {
       setSharing(false);
     }
@@ -99,7 +113,10 @@ export function ShareDialog({
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit} className="mt-4 flex flex-col gap-3.5">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-4 flex flex-col gap-3.5"
+            >
               <div className="flex flex-col gap-1.5">
                 <Label htmlFor="share-title">
                   Title <span className="text-red-500">*</span>
@@ -129,7 +146,8 @@ export function ShareDialog({
 
               {error && (
                 <div className="text-xs text-[var(--danger)]">
-                  {error} (pastikan backend <code>apps/api</code> berjalan &amp; sudah di-restart)
+                  {error} (pastikan backend <code>apps/api</code> berjalan &amp;
+                  sudah di-restart)
                 </div>
               )}
 
@@ -182,16 +200,26 @@ export function ShareDialog({
               >
                 key stays in #
               </span>
-              <Button
-                type="button"
-                size="sm"
-                onClick={async () => {
-                  await navigator.clipboard.writeText(magicLink);
-                  onShowToast("Magic link copied");
-                }}
-              >
-                Copy
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  onClick={handleDone}
+                >
+                  Done
+                </Button>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(magicLink);
+                    onShowToast("Magic link copied");
+                  }}
+                >
+                  Copy
+                </Button>
+              </div>
             </div>
           </div>
         )}
