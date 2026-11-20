@@ -33,18 +33,38 @@ export function AppHeader({
     textDecoration: "none",
   };
 
+  const brandContent = (
+    <>
+      Skytype
+      <MarkerSwoosh color="var(--marker-warm)" />
+    </>
+  );
+
   return (
     <header className="app-header">
       {linkToHome ? (
         <a href="/" className="app-header-brand" style={brandStyle}>
-          Skytype
-          <MarkerSwoosh color="var(--marker-warm)" />
+          {brandContent}
         </a>
+      ) : onTabChange ? (
+        <button
+          type="button"
+          onClick={() => onTabChange("write")}
+          className="app-header-brand"
+          style={{
+            ...brandStyle,
+            background: "none",
+            border: "none",
+            padding: 0,
+            cursor: "pointer",
+          }}
+        >
+          {brandContent}
+        </button>
       ) : (
         <div style={{ display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <span className="app-header-brand" style={brandStyle}>
-            Skytype
-            <MarkerSwoosh color="var(--marker-warm)" />
+            {brandContent}
           </span>
         </div>
       )}

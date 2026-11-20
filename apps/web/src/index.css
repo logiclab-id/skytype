@@ -405,7 +405,7 @@ pre.is-scrolling::-webkit-scrollbar-thumb,
 
 .editor-pane {
   display: flex;
-  height: clamp(300px, calc(100dvh - 295px), 620px);
+  height: clamp(280px, calc(100dvh - 305px), 620px);
   overflow: hidden;
 }
 
