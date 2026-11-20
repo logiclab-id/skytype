@@ -65,9 +65,42 @@ export function autoFormatOnPaste(
         return before + formatted.output + after;
       }
     }
+    return before + pastedText + after;
   }
 
-  const combined = before + pastedText + after;
+  let nextPasted = pastedText;
+  const normalizedPaste = pastedText.replace(/\r\n?/g, "\n");
+  const trimmedPaste = normalizedPaste.trim();
+  const isStructuredPaste =
+    trimmedPaste.startsWith("{") ||
+    trimmedPaste.startsWith("[") ||
+    normalizedPaste.includes("```");
+
+  if (normalizedPaste.includes("\n") && !isStructuredPaste) {
+    const lastNewline = before.lastIndexOf("\n");
+    const currentLinePrefix = before.slice(lastNewline + 1);
+    const bulletPrefix = currentLinePrefix.match(/^([ \t]*)(?:[-*+])\s$/);
+    const numPrefix = currentLinePrefix.match(/^([ \t]*)(\d+)\.\s$/);
+
+    if (bulletPrefix || numPrefix) {
+      const indent = bulletPrefix ? bulletPrefix[1] : numPrefix![1];
+      let nextNum = numPrefix ? Number(numPrefix[2]) : 0;
+      const pasteLines = normalizedPaste.split("\n");
+
+      nextPasted = pasteLines
+        .map((line, idx) => {
+          if (idx === 0) return line.trimStart();
+          if (line.trim() === "") return "";
+          if (/^[ \t]*(?:[•◦▪▫‣⁃∙]|[-*+]|\d+[.)])\s+/.test(line)) return line;
+          if (bulletPrefix) return `${indent}- ${line.trimStart()}`;
+          nextNum += 1;
+          return `${indent}${nextNum}. ${line.trimStart()}`;
+        })
+        .join("\n");
+    }
+  }
+
+  const combined = before + nextPasted + after;
   return autoFormatMixed(combined);
 }
 
@@ -375,7 +408,6 @@ function formatMarkup(raw: string): string {
 
     out.push("  ".repeat(indent) + line);
 
-    // Adjust indent for next line
     const openMatch = line.match(/^<([a-zA-Z][a-zA-Z0-9.-]*)\b[^>]*>$/);
     const isSelfClosing = /\/>$/.test(line);
     const hasInlineClose = /^<([a-zA-Z][a-zA-Z0-9.-]*)\b[^>]*>.*<\/\1>$/.test(line);
