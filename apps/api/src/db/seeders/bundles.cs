@@ -1,13 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Typely.Api.Src.Db.Schema;
 
-namespace Typely.Api.Src.Db;
+namespace Typely.Api.Src.Db.Seeders;
 
-public static class DbSeeder
+public static class BundlesSeeder
 {
-    /// <summary>
-    /// Seeds an initial opaque demo record in Development if the database is empty.
-    /// No plaintext or decryption keys are ever stored.
-    /// </summary>
+    private static readonly Guid DemoBundleId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+
     public static void Seed(AppDbContext db, bool isDevelopment)
     {
         if (!isDevelopment || db.Bundles.AsNoTracking().Any())
@@ -15,12 +14,14 @@ public static class DbSeeder
             return;
         }
 
+        var now = DateTimeOffset.UtcNow;
         db.Bundles.Add(new Bundle
         {
-            Id = "demo-bundle",
+            Id = DemoBundleId,
             Ciphertext = "opaque-demo-ciphertext",
             Iv = "opaque-demo-iv",
-            CreatedAt = DateTimeOffset.UtcNow,
+            CreatedAt = now,
+            ExpiresAt = now.AddYears(1),
         });
 
         db.SaveChanges();

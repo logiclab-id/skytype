@@ -1,4 +1,5 @@
 import { MarkerSwoosh, SketchUnderline } from "@/components/doodles";
+import { ThemeSwitcher } from "@/components/theme-switcher";
 import type { Tab } from "@/types/bundle";
 
 interface AppHeaderProps {
@@ -90,7 +91,10 @@ export function AppHeader({
         </nav>
       )}
 
-      {rightAction ?? <div style={{ width: "68px" }} />}
+      <div style={{ display: "flex", alignItems: "center", gap: "0.55rem" }}>
+        {rightAction}
+        <ThemeSwitcher />
+      </div>
     </header>
   );
 }

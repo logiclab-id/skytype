@@ -5,12 +5,17 @@
     "apps/web"
   ],
   "scripts": {
-    "dev": "concurrently -n api,web -c cyan,green \"dotnet run --project apps/api/api.csproj\" \"bun run --cwd apps/web dev\"",
-    "dev:api": "dotnet run --project apps/api/api.csproj",
+    "dev": "concurrently -n api,web -c cyan,green \"dotnet watch run --non-interactive --project apps/api/api.csproj\" \"bun run --cwd apps/web dev\"",
+    "dev:api": "dotnet watch run --non-interactive --project apps/api/api.csproj",
     "dev:web": "bun run --cwd apps/web dev",
     "build": "dotnet build apps/api/api.csproj && bun run --cwd apps/web build",
     "build:api": "dotnet build apps/api/api.csproj",
-    "build:web": "bun run --cwd apps/web build"
+    "build:web": "bun run --cwd apps/web build",
+    "db:migrate": "bun scripts/migrate-db.mjs",
+    "db:ef:add": "dotnet ef migrations add --project apps/api/api.csproj --output-dir migrations",
+    "db:ef:update": "dotnet ef database update --project apps/api/api.csproj",
+    "db:ef:sql": "dotnet ef migrations script --idempotent --project apps/api/api.csproj --output apps/api/migrations/migrate.sql",
+    "lint:conventions": "bun scripts/lint-conventions.mjs"
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

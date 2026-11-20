@@ -1,4 +1,6 @@
 using Typely.Api.Src.Db;
+using Typely.Api.Src.Modules;
+using Typely.Api.Src.Utils;
 
 namespace Typely.Api.Src;
 
@@ -24,6 +26,8 @@ public static class AppSetup
         });
 
         builder.Services.AddDatabase(builder.Configuration);
+        builder.Services.AddBundlesModule();
+        builder.Services.AddHostedService<ExpiredBundlesCleanupService>();
     }
 
     public static void ConfigureMiddleware(this WebApplication app)

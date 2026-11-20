@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { AppHeader } from "@/components/app-header";
 import { BundleContent } from "@/components/bundle-content";
-import { HandwrittenToast } from "@/components/doodles";
+import { CornerHandwrittenNotes, HandwrittenToast } from "@/components/doodles";
 import { fetchEncryptedBundle } from "@/core/bundle-api";
 import { decryptBundle } from "@/core/crypto";
 import { parseMixedSections } from "@/core/formatters";
@@ -13,7 +13,7 @@ interface SharedViewerProps {
 }
 
 export function SharedViewer({ bundleId }: SharedViewerProps) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<SharedBundleData | null>(null);
   const { toast, showToast } = useToast();
@@ -22,6 +22,7 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
     const keyFragment = window.location.hash.replace(/^#/, "");
     if (!keyFragment) {
       setError("Missing decryption key in URL fragment.");
+      setLoading(false);
       return;
     }
 
@@ -63,26 +64,34 @@ export function SharedViewer({ bundleId }: SharedViewerProps) {
     [data]
   );
 
+  if (loading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--bg-canvas)]">
+        <img
+          src="/loading.gif"
+          alt="Loading"
+          className="h-40 w-40 object-contain"
+        />
+      </div>
+    );
+  }
+
   return (
     <div style={{ minHeight: "100vh", position: "relative", display: "flex", flexDirection: "column", padding: "1rem 1.5rem 2.5rem" }}>
+      <CornerHandwrittenNotes />
+
       <AppHeader
         linkToHome
         rightAction={
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <a href="/" className="clean-btn" style={{ textDecoration: "none" }}>
-              + New Bundle
+              New Bundle
             </a>
           </div>
         }
       />
 
       <main style={{ maxWidth: "840px", width: "100%", margin: "1.4rem auto 0", display: "flex", flexDirection: "column", gap: "1rem" }}>
-        {loading && (
-          <div className="clean-card" style={{ padding: "2rem", color: "var(--ink-muted)", fontSize: "0.9rem" }}>
-            Decrypting bundle locally in your browser...
-          </div>
-        )}
-
         {error && (
           <div className="clean-card" style={{ padding: "1.5rem", color: "var(--danger)", borderColor: "var(--danger)", fontSize: "0.9rem" }}>
             {error}

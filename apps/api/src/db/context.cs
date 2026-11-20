@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Typely.Api.Src.Db.Schema;
 
 namespace Typely.Api.Src.Db;
 
@@ -15,7 +16,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
             entity.Property(e => e.Id)
                 .HasColumnName("id")
-                .HasMaxLength(32)
+                .HasColumnType("uuid")
                 .IsRequired();
 
             entity.Property(e => e.Ciphertext)
@@ -32,7 +33,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .IsRequired();
 
             entity.Property(e => e.ExpiresAt)
-                .HasColumnName("expires_at");
+                .HasColumnName("expires_at")
+                .HasDefaultValueSql("NOW() + INTERVAL '1 year'");
 
             entity.HasIndex(e => e.CreatedAt)
                 .HasDatabaseName("ix_bundles_created_at");

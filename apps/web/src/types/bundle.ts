@@ -1,5 +1,7 @@
 export type Tab = "write" | "preview" | "docs";
 
+export type ThemeMode = "dark" | "light" | "warm";
+
 export interface BundlePayload {
   version: 1;
   title: string;

@@ -1,3 +1,87 @@
+export function TypelyLogoMark({ size = 44 }: { size?: number }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "flex-start",
+        transform: "rotate(-5deg)",
+        userSelect: "none",
+      }}
+    >
+      <svg
+        width={size}
+        height={size}
+        viewBox="0 0 48 48"
+        fill="none"
+        aria-hidden="true"
+      >
+        <path
+          d="M9 17 C8.5 14.5 10.5 12.5 13 12.8 L34 11.8 C36.8 11.6 38.5 13.5 38.2 16.2 L37.2 31.5 C37 34.2 35.2 35.8 32.5 35.8 L12.5 36.2 C9.8 36.2 8.4 34.4 8.6 31.8 Z"
+          stroke="currentColor"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M9.5 15.5 Q 23.5 26.5, 37.5 14.8"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+        />
+        <path
+          d="M20.5 23.2 C20.5 19.8, 26.5 19.8, 26.5 23.2"
+          stroke="var(--accent)"
+          strokeWidth="1.7"
+          strokeLinecap="round"
+        />
+        <rect
+          x="18.8"
+          y="23"
+          width="9.4"
+          height="7.2"
+          rx="2"
+          stroke="var(--accent)"
+          strokeWidth="1.7"
+        />
+        <circle cx="23.5" cy="26.5" r="1.1" fill="var(--accent)" />
+        <path
+          d="M41 8 L42.2 11.2 L45.5 12.2 L42.2 13.4 L41 16.5 L39.8 13.4 L36.5 12.2 L39.8 11.2 Z"
+          stroke="var(--accent)"
+          strokeWidth="1.4"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M5 10 Q 3 7, 7 5"
+          stroke="currentColor"
+          strokeWidth="1.4"
+          strokeLinecap="round"
+          opacity="0.6"
+        />
+      </svg>
+      <div
+        style={{
+          fontFamily: "var(--font-hand)",
+          fontSize: "1.22rem",
+          lineHeight: 1,
+          marginTop: "-4px",
+          color: "var(--ink-muted)",
+        }}
+      >
+        sealed in browser
+      </div>
+      <svg width="102" height="9" viewBox="0 0 102 9" fill="none" style={{ marginTop: "1px" }}>
+        <path
+          d="M3 6 Q 52 2, 99 6"
+          stroke="var(--marker-accent)"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+        />
+      </svg>
+    </div>
+  );
+}
+
 export function MarkerSwoosh({ color = "var(--marker-warm)" }: { color?: string }) {
   return (
     <svg
@@ -77,7 +161,7 @@ export function CornerHandwrittenNotes() {
         zIndex: 0,
       }}
     >
-      {/* Bottom-right handwritten note + sketchy key & sparkle */}
+
       <div
         style={{
           position: "absolute",
@@ -107,6 +191,18 @@ export function CornerHandwrittenNotes() {
           <path d="M4 7 Q 64 2, 124 6" stroke="var(--marker-warm)" strokeWidth="3.5" strokeLinecap="round" />
         </svg>
       </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: "1.1rem",
+          left: "1.5rem",
+          opacity: 0.72,
+          color: "var(--ink-muted)",
+        }}
+      >
+        <TypelyLogoMark size={44} />
+      </div>
     </div>
   );
 }
@@ -123,7 +219,7 @@ export function SubtleHandwrittenAccents() {
         zIndex: 0,
       }}
     >
-      {/* Top-left: coffee cup + "paste anything ->" */}
+
       <div
         style={{
           position: "absolute",
@@ -148,7 +244,6 @@ export function SubtleHandwrittenAccents() {
         </svg>
       </div>
 
-      {/* Bottom-left: paper plane + "{ code + notes }" */}
       <div
         style={{
           position: "absolute",
@@ -179,7 +274,6 @@ export function SubtleHandwrittenAccents() {
         </div>
       </div>
 
-      {/* Top-right: crown, sparkles & "no history!" */}
       <div
         style={{
           position: "absolute",
@@ -201,15 +295,14 @@ export function SubtleHandwrittenAccents() {
           <path d="M14 18 L16 24 L22 26 L16 28 L14 34 L12 28 L6 26 L12 24 Z" stroke="var(--accent)" strokeWidth="1.5" strokeLinejoin="round" />
           <circle cx="82" cy="18" r="2.3" fill="var(--accent)" />
         </svg>
-        <div style={{ fontFamily: "var(--font-hand)", fontSize: "1.35rem", marginTop: "-10px" }}>
-          no history!
+          <div style={{ fontFamily: "var(--font-hand)", fontSize: "1.35rem", marginTop: "-10px" }}>
+            no history!
+          </div>
         </div>
       </div>
-    </div>
-  );
-}
+    );
+  }
 
-/* Crisp 1.8px stroke icons */
 export function HandwrittenToast({ message }: { message: string }) {
   return (
     <div
@@ -324,3 +417,4 @@ export function IconRedo() {
     </svg>
   );
 }
+

@@ -11,9 +11,6 @@ export interface ParsedSection {
   content: string;
 }
 
-/**
- * Formats either the selected range inside the field or the entire mixed document.
- */
 export function formatFieldContent(
   fullText: string,
   selectionStart: number,
@@ -45,10 +42,6 @@ export function formatFieldContent(
   return formatSnippet(fullText, format);
 }
 
-/**
- * Auto-formats pasted content if it is inside a ```json / ```yaml block
- * or contains valid JSON / fenced blocks.
- */
 export function autoFormatOnPaste(
   fullText: string,
   selectionStart: number,
@@ -58,7 +51,6 @@ export function autoFormatOnPaste(
   const before = fullText.slice(0, selectionStart);
   const after = fullText.slice(selectionEnd);
 
-  // Check if cursor is inside an open fenced block
   const fenceMatches = [...before.matchAll(/```([a-zA-Z0-9_+-]*)/g)];
   if (fenceMatches.length % 2 === 1) {
     const lastFenceLang = (fenceMatches[fenceMatches.length - 1][1] ?? "").toLowerCase();
@@ -103,7 +95,6 @@ function normalizeListsOutsideFences(input: string): string {
       continue;
     }
 
-    // Match Unicode bullets (•, ◦, ▪, ▫, ‣, ⁃, ∙) or markdown bullets (-, *, +)
     const bulletMatch = line.match(/^([ \t]*)(?:[•◦▪▫‣⁃∙]|[-*+])\s+(.*)$/);
     if (bulletMatch) {
       const indent = bulletMatch[1].replace(/\t/g, "  ");
@@ -114,7 +105,6 @@ function normalizeListsOutsideFences(input: string): string {
       continue;
     }
 
-    // Match numbered lists like "1. foo", "1) foo", "  2.   bar"
     const numMatch = line.match(/^([ \t]*)\d+[.)]\s+(.*)$/);
     if (numMatch) {
       const indent = numMatch[1].replace(/\t/g, "  ");
@@ -162,7 +152,7 @@ function formatSnippet(input: string, format: BlockFormat): FormatResult {
         const parsed: unknown = JSON.parse(trimmed);
         return { ok: true, output: toYaml(parsed, 0).trimEnd() };
       } catch {
-        // Fall through to YAML whitespace normalization
+
       }
     }
     const normalized = input
@@ -175,12 +165,8 @@ function formatSnippet(input: string, format: BlockFormat): FormatResult {
   return { ok: true, output: input };
 }
 
-/**
- * Smartly formats fenced ```json / ```yaml blocks and standalone JSON objects/arrays
- * inside a mixed text+JSON+YAML document without disturbing surrounding notes.
- */
 function autoFormatMixed(input: string): string {
-  // 1. Format fenced code blocks for all supported languages (and untagged ``` blocks)
+
   const withFormattedFences = input.replace(
     /```([a-zA-Z0-9_+-]*)\r?\n([\s\S]*?)```/gi,
     (match, lang: string, body: string) => {
@@ -204,7 +190,6 @@ function autoFormatMixed(input: string): string {
         return `\`\`\`${lang}\n${cleaned}\n\`\`\``;
       }
 
-      // Untagged ``` block: auto-detect JSON or HTML/JSX
       const trimmedBody = body.trim();
       if (trimmedBody.startsWith("{") || trimmedBody.startsWith("[")) {
         const res = formatSnippet(trimmedBody, "json");
@@ -217,18 +202,16 @@ function autoFormatMixed(input: string): string {
     }
   );
 
-  // 2. If the whole document is valid JSON, pretty-print it directly
   const trimmed = withFormattedFences.trim();
   if (trimmed.startsWith("{") || trimmed.startsWith("[")) {
     try {
       const parsed: unknown = JSON.parse(trimmed);
       return JSON.stringify(parsed, null, 2);
     } catch {
-      // Mixed content; scan for embedded JSON blocks below
+
     }
   }
 
-  // 3. Scan line-by-line for embedded JSON blocks outside fences
   const lines = withFormattedFences.split("\n");
   const out: string[] = [];
   let inFence = false;
@@ -244,14 +227,14 @@ function autoFormatMixed(input: string): string {
     }
 
     if (!inFence && (line.trim().startsWith("{") || line.trim().startsWith("["))) {
-      // Try single-line JSON first
+
       try {
         const parsed: unknown = JSON.parse(line.trim());
         out.push(JSON.stringify(parsed, null, 2));
         i++;
         continue;
       } catch {
-        // Try accumulating multi-line JSON until valid
+
         let candidate = line;
         let matched = false;
         for (let j = i + 1; j < Math.min(lines.length, i + 80); j++) {
@@ -263,7 +246,7 @@ function autoFormatMixed(input: string): string {
             matched = true;
             break;
           } catch {
-            // Keep accumulating
+
           }
         }
         if (matched) continue;
@@ -277,9 +260,6 @@ function autoFormatMixed(input: string): string {
   return normalizeListsOutsideFences(out.join("\n"));
 }
 
-/**
- * Splits mixed text into typed sections for the Preview tab.
- */
 export function parseMixedSections(input: string): ParsedSection[] {
   if (!input.trim()) return [];
 
@@ -318,7 +298,7 @@ function detectLooseType(text: string): ParsedSection["type"] {
       JSON.parse(trimmed);
       return "json";
     } catch {
-      // Not pure JSON
+
     }
   }
   const lines = trimmed.split("\n");
@@ -439,3 +419,4 @@ function formatBraceCode(raw: string): string {
 
   return out.join("\n");
 }
+

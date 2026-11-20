@@ -45,7 +45,7 @@ export function DocsView() {
         lineHeight: 1.6,
       }}
     >
-      {/* Header */}
+
       <div>
         <h2
           style={{
@@ -64,7 +64,6 @@ export function DocsView() {
         </p>
       </div>
 
-      {/* Annotated Handwritten UI Mockup Screenshot */}
       <div
         style={{
           border: "1px solid var(--border)",
@@ -79,16 +78,15 @@ export function DocsView() {
           style={{ width: "100%", height: "auto", display: "block" }}
           aria-label="Annotated handwritten guide of Typely UI"
         >
-          {/* Mini Editor Card Mockup */}
+
           <rect x="135" y="42" width="490" height="210" rx="8" fill="#181818" stroke="#2c2c2c" strokeWidth="1.5" />
-          {/* Top toolbar bar */}
+
           <rect x="135" y="42" width="490" height="32" rx="8" fill="#141414" />
           <line x1="135" y1="74" x2="625" y2="74" stroke="#262626" strokeWidth="1" />
-          {/* Mini toolbar icons */}
+
           <text x="152" y="62" fill="#8a8a8a" fontSize="11" fontFamily="monospace">B  I  S  &lt;&gt;  |  H1  H2  |  •  1.  ❞</text>
           <text x="548" y="62" fill="#8a8a8a" fontSize="11" fontFamily="sans-serif">↶  ↷  Preview</text>
 
-          {/* Code inside mockup */}
           <text x="152" y="96" fill="#6b7280" fontSize="11" fontFamily="monospace">1  # API Response</text>
           <text x="152" y="114" fill="#5c6370" fontSize="11" fontFamily="monospace">2  ```<tspan fill="#82aaff">json</tspan></text>
           <text x="152" y="132" fill="#ededed" fontSize="11" fontFamily="monospace">3  {"{"}</text>
@@ -97,7 +95,6 @@ export function DocsView() {
           <text x="152" y="186" fill="#ededed" fontSize="11" fontFamily="monospace">6  {"}"}</text>
           <text x="152" y="204" fill="#5c6370" fontSize="11" fontFamily="monospace">7  ```</text>
 
-          {/* Bottom bar inside mockup */}
           <line x1="135" y1="218" x2="625" y2="218" stroke="#262626" strokeWidth="1" />
           <rect x="148" y="225" width="66" height="20" rx="5" fill="#181818" stroke="#303030" />
           <text x="157" y="239" fill="#8a8a8a" fontSize="10" fontFamily="sans-serif">Format ▾</text>
@@ -107,11 +104,9 @@ export function DocsView() {
           <rect x="556" y="225" width="44" height="20" rx="5" fill="#181818" stroke="#303030" />
           <text x="566" y="239" fill="#8a8a8a" fontSize="10" fontFamily="sans-serif">Clear</text>
 
-          {/* Share button below mockup */}
           <rect x="338" y="268" width="84" height="28" rx="7" fill="#0284c7" />
           <text x="364" y="286" fill="#ffffff" fontSize="11" fontWeight="600" fontFamily="sans-serif">Share</text>
 
-          {/* Handwritten Callouts */}
           <text x="12" y="26" fill="#d9b27c" fontSize="18" fontFamily="Caveat, cursive" transform="rotate(-4 12 26)">
             1. Markdown &amp; list tools
           </text>
@@ -147,7 +142,6 @@ export function DocsView() {
         </svg>
       </div>
 
-      {/* How to Use */}
       <div>
         <h3 style={{ fontFamily: "var(--font-hand)", fontSize: "1.45rem", color: "var(--ink)", marginBottom: "0.4rem" }}>
           How to Use
@@ -165,7 +159,6 @@ export function DocsView() {
         </ol>
       </div>
 
-      {/* Button Reference */}
       <div>
         <h3 style={{ fontFamily: "var(--font-hand)", fontSize: "1.45rem", color: "var(--ink)", marginBottom: "0.55rem" }}>
           Button Guide
@@ -200,3 +193,4 @@ export function DocsView() {
     </div>
   );
 }
+

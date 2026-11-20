@@ -1,0 +1,12 @@
+pre-commit:
+  parallel: true
+  commands:
+    conventions:
+      glob: "*.{ts,tsx,cs,css}"
+      run: bun scripts/lint-conventions.mjs {staged_files}
+    web-typecheck:
+      glob: "apps/web/**/*.{ts,tsx}"
+      run: bun run --cwd apps/web build
+    api-build:
+      glob: "apps/api/**/*.cs"
+      run: dotnet build apps/api/api.csproj --no-restore

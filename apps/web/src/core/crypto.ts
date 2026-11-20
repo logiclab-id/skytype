@@ -1,8 +1,3 @@
-/**
- * Client-side AES-GCM encryption/decryption using Web Crypto API.
- * Plaintext and keys never leave the browser.
- */
-
 function toBase64Url(bytes: Uint8Array): string {
   let binary = "";
   for (let i = 0; i < bytes.length; i++) {
@@ -77,3 +72,4 @@ export async function decryptBundle(
 
   return new TextDecoder().decode(plainBuffer);
 }
+

@@ -17,7 +17,6 @@
   --danger: #fca5a5;
   --danger-bg: rgba(239, 68, 68, 0.12);
 
-  /* shadcn/ui tokens mapped to matte black */
   --background: #111111;
   --foreground: #ededed;
   --card: #181818;
@@ -34,7 +33,6 @@
   --ring: #38bdf8;
   --radius: 0.5rem;
 
-  /* Syntax tokens (Matte Black - soft pastel, low-glare) */
   --tok-key: #82aaff;
   --tok-str: #9ec58a;
   --tok-num: #d9b27c;
@@ -44,6 +42,96 @@
   --font-hand: "Caveat", cursive;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
+
+:root[data-theme="light"] {
+  --bg-canvas: #f8f9fa;
+  --surface: #ffffff;
+  --surface-sub: #f3f4f6;
+  --surface-hover: #eaecef;
+  --border: #e2e4e8;
+  --border-strong: #cbd0d8;
+  --ink: #18181b;
+  --ink-muted: #64748b;
+  --accent: #0284c7;
+  --accent-soft: rgba(2, 132, 199, 0.1);
+  --accent-border: rgba(2, 132, 199, 0.28);
+  --marker-accent: rgba(56, 189, 248, 0.26);
+  --marker-warm: rgba(250, 204, 21, 0.38);
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.08);
+
+  --background: #f8f9fa;
+  --foreground: #18181b;
+  --card: #ffffff;
+  --card-foreground: #18181b;
+  --popover: #ffffff;
+  --popover-foreground: #18181b;
+  --primary: #0284c7;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #18181b;
+  --muted: #f3f4f6;
+  --muted-foreground: #64748b;
+  --input: #d4d4d8;
+  --ring: #0284c7;
+
+  --tok-key: #2563eb;
+  --tok-str: #15803d;
+  --tok-num: #b45309;
+  --tok-bool: #7c3aed;
+}
+
+:root[data-theme="light"] .tok-tag { color: #be123c; }
+:root[data-theme="light"] .tok-code-base { color: #1e293b; }
+:root[data-theme="light"] .tok-fence { color: #94a3b8; }
+:root[data-theme="light"] .tok-lang { color: #2563eb; }
+:root[data-theme="light"] .tok-heading { color: #b45309; }
+:root[data-theme="light"] .tok-prose { color: #475569; }
+
+:root[data-theme="warm"] {
+  --bg-canvas: #f5efe4;
+  --surface: #fbf7ef;
+  --surface-sub: #efe7d8;
+  --surface-hover: #e7decb;
+  --border: #e1d7c4;
+  --border-strong: #cbbda4;
+  --ink: #2c241b;
+  --ink-muted: #786b59;
+  --accent: #b45309;
+  --accent-soft: rgba(180, 83, 9, 0.1);
+  --accent-border: rgba(180, 83, 9, 0.28);
+  --marker-accent: rgba(217, 119, 6, 0.22);
+  --marker-warm: rgba(234, 179, 8, 0.35);
+  --danger: #b91c1c;
+  --danger-bg: rgba(185, 28, 28, 0.08);
+
+  --background: #f5efe4;
+  --foreground: #2c241b;
+  --card: #fbf7ef;
+  --card-foreground: #2c241b;
+  --popover: #fbf7ef;
+  --popover-foreground: #2c241b;
+  --primary: #b45309;
+  --primary-foreground: #ffffff;
+  --secondary: #efe7d8;
+  --secondary-foreground: #2c241b;
+  --muted: #efe7d8;
+  --muted-foreground: #786b59;
+  --input: #d6cbb5;
+  --ring: #b45309;
+
+  --tok-key: #9a3412;
+  --tok-str: #3f6212;
+  --tok-num: #b45309;
+  --tok-bool: #6d28d9;
+}
+
+:root[data-theme="warm"] .tok-tag { color: #9f1239; }
+:root[data-theme="warm"] .tok-code-base { color: #33291f; }
+:root[data-theme="warm"] .tok-fence { color: #9c8f7a; }
+:root[data-theme="warm"] .tok-lang { color: #9a3412; }
+:root[data-theme="warm"] .tok-heading { color: #9a3412; }
+:root[data-theme="warm"] .tok-prose { color: #5c5042; }
 
 * {
   box-sizing: border-box;
@@ -222,3 +310,4 @@ pre.is-scrolling::-webkit-scrollbar-thumb,
 .scroll-auto-hide.is-scrolling::-webkit-scrollbar-thumb {
   background: var(--border-strong);
 }
+
